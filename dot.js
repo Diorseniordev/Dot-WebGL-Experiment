@@ -801,7 +801,7 @@ var testMode = 0;
 function loop_task() {
   $("#testResult").html("");
 
-  var progress = Math.round((testMode * 100) / 7);
+  var progress = Math.round((testMode * 100) / 1);
   $("#testProgress > div > div").css("width", progress + "%");
   $("#testProgress span").html(progress);
 
@@ -831,7 +831,7 @@ function loop_task() {
 
 function go_next_task() {
   testMode++;
-  if (testMode == 7) {
+  if (testMode == 1) {
     $("#instructions1").hide();
     $("#example_container").hide();
     three_disable();
