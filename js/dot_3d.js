@@ -97,7 +97,7 @@ function three_init_test(modeFlag) {
     new THREE.MeshBasicMaterial({ color: 0xffffff })
   );
   plane.visible = false;
-  // scene.add(plane);
+  scene.add(plane);
 
   var cbgeometry = new THREE.PlaneGeometry(50, 50, 8, 8),
     cbmaterials = [];
@@ -158,11 +158,11 @@ function three_init_test(modeFlag) {
   objects.push(object2);
   scene.add(object2);
 
-  var material3 = new THREE.MeshPhongMaterial({ color: 0xffff00 });
-  var object3 = new THREE.Mesh(new THREE.SphereGeometry(2, 10, 10), material3);
-  object3.position.set(p2.x, p2.y, p2.z);
-  objects.push(object3);
-  scene.add(object3);
+  // var material3 = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+  // var object3 = new THREE.Mesh(new THREE.SphereGeometry(2, 10, 10), material3);
+  // object3.position.set(p2.x, p2.y, p2.z);
+  // objects.push(object3);
+  // scene.add(object3);
 
   offset = new THREE.Vector3();
   raycaster = new THREE.Raycaster();
@@ -242,33 +242,35 @@ function three_init_test_sphere(onComplete) {
     if (mode != 21) return;
 
     var d0 = Math.sqrt(
-        objects[0].position.x * objects[0].position.x +
-          objects[0].position.y * objects[0].position.y +
-          objects[0].position.z * objects[0].position.z
-      ),
-      d1 = Math.sqrt(
-        objects[1].position.x * objects[1].position.x +
-          objects[1].position.y * objects[1].position.y +
-          objects[1].position.z * objects[1].position.z
-      );
+      objects[0].position.x * objects[0].position.x +
+        objects[0].position.y * objects[0].position.y +
+        objects[0].position.z * objects[0].position.z
+    );
+    // ),
+    // d1 = Math.sqrt(
+    //   objects[1].position.x * objects[1].position.x +
+    //     objects[1].position.y * objects[1].position.y +
+    //     objects[1].position.z * objects[1].position.z
+    // );
 
-    var valid0 = d0 < 18.25,
-      valid1 = d1 < 18.25;
+    var valid0 = d0 < 18.25;
+    // , valid1 = d1 < 18.25;
 
-    var msg =
-      valid0 && valid1
-        ? "Both dots are inside the shape."
-        : !valid0 && !valid1
-        ? "Both dots are outside the shape."
-        : !valid0
-        ? "The green dot is outside the shape."
-        : "The yellow dot is outside the shape.";
-
+    // var msg =
+    //   valid0 && valid1
+    //     ? "Both dots are inside the shape."
+    //     : !valid0 && !valid1
+    //     ? "Both dots are outside the shape."
+    //     : !valid0
+    //     ? "The green dot is outside the shape."
+    //     : "The yellow dot is outside the shape.";
+    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
     $("#testResult").html(msg);
 
-    if (valid0 && valid1 && onComplete != null) {
+    // if (valid0 && valid1 && onComplete != null) {
+    if (valid0 && onComplete != null) {
       testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      testResults[testResults.length - 1].endPosition2 = objects[1].position;
+      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
   });
@@ -304,34 +306,35 @@ function three_init_test_cube(onComplete) {
     if (mode != 22) return;
 
     var valid0 =
-        objects[0].position.x < 14.25 &&
-        objects[0].position.x > -14.25 &&
-        objects[0].position.y < 14.25 &&
-        objects[0].position.y > -14.25 &&
-        objects[0].position.z < 14.25 &&
-        objects[0].position.z > -14.25,
-      valid1 =
-        objects[1].position.x < 14.25 &&
-        objects[1].position.x > -14.25 &&
-        objects[1].position.y < 14.25 &&
-        objects[1].position.y > -14.25 &&
-        objects[1].position.z < 14.25 &&
-        objects[1].position.z > -14.25;
+      objects[0].position.x < 14.25 &&
+      objects[0].position.x > -14.25 &&
+      objects[0].position.y < 14.25 &&
+      objects[0].position.y > -14.25 &&
+      objects[0].position.z < 14.25 &&
+      objects[0].position.z > -14.25;
+    //   ,
+    // valid1 =
+    //   objects[1].position.x < 14.25 &&
+    //   objects[1].position.x > -14.25 &&
+    //   objects[1].position.y < 14.25 &&
+    //   objects[1].position.y > -14.25 &&
+    //   objects[1].position.z < 14.25 &&
+    //   objects[1].position.z > -14.25;
 
-    var msg =
-      valid0 && valid1
-        ? "Both dots are inside the shape."
-        : !valid0 && !valid1
-        ? "Both dots are outside the shape."
-        : !valid0
-        ? "The green dot is outside the shape."
-        : "The yellow dot is outside the shape.";
-
+    // var msg =
+    //   valid0 && valid1
+    //     ? "Both dots are inside the shape."
+    //     : !valid0 && !valid1
+    //     ? "Both dots are outside the shape."
+    //     : !valid0
+    //     ? "The green dot is outside the shape."
+    //     : "The yellow dot is outside the shape.";
+    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
     $("#testResult").html(msg);
 
-    if (valid0 && valid1 && onComplete != null) {
+    if (valid0 && onComplete != null) {
       testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      testResults[testResults.length - 1].endPosition2 = objects[1].position;
+      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
   });
@@ -366,11 +369,13 @@ function three_init_test_pyramid(onComplete) {
     if (mode != 23) return;
 
     var valid0 =
-        objects[0].position.y < 18.25 && objects[0].position.y > -18.25,
-      valid1 = objects[1].position.y < 18.25 && objects[1].position.y > -18.25;
+      objects[0].position.y < 18.25 && objects[0].position.y > -18.25;
+    //   ,
+    // valid1 = objects[1].position.y < 18.25 && objects[1].position.y > -18.25;
 
-    var validR0 = ((20 - objects[0].position.y) * 25) / 40 - 1,
-      validR1 = ((20 - objects[1].position.y) * 25) / 40 - 1;
+    var validR0 = ((20 - objects[0].position.y) * 25) / 40 - 1;
+    // ,
+    //   validR1 = ((20 - objects[1].position.y) * 25) / 40 - 1;
 
     valid0 =
       valid0 &&
@@ -378,27 +383,27 @@ function three_init_test_pyramid(onComplete) {
       objects[0].position.x + objects[0].position.z > -validR0 &&
       objects[0].position.x - objects[0].position.z < validR0 &&
       objects[0].position.x - objects[0].position.z > -validR0;
-    valid1 =
-      valid1 &&
-      objects[1].position.x + objects[1].position.z < validR1 &&
-      objects[1].position.x + objects[1].position.z > -validR1 &&
-      objects[1].position.x - objects[1].position.z < validR1 &&
-      objects[1].position.x - objects[1].position.z > -validR1;
+    // valid1 =
+    //   valid1 &&
+    //   objects[1].position.x + objects[1].position.z < validR1 &&
+    //   objects[1].position.x + objects[1].position.z > -validR1 &&
+    //   objects[1].position.x - objects[1].position.z < validR1 &&
+    //   objects[1].position.x - objects[1].position.z > -validR1;
 
-    var msg =
-      valid0 && valid1
-        ? "Both dots are inside the shape."
-        : !valid0 && !valid1
-        ? "Both dots are outside the shape."
-        : !valid0
-        ? "The green dot is outside the shape."
-        : "The yellow dot is outside the shape.";
-
+    // var msg =
+    //   valid0 && valid1
+    //     ? "Both dots are inside the shape."
+    //     : !valid0 && !valid1
+    //     ? "Both dots are outside the shape."
+    //     : !valid0
+    //     ? "The green dot is outside the shape."
+    //     : "The yellow dot is outside the shape.";
+    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
     $("#testResult").html(msg);
 
-    if (valid0 && valid1 && onComplete != null) {
+    if (valid0 && onComplete != null) {
       testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      testResults[testResults.length - 1].endPosition2 = objects[1].position;
+      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
   });
@@ -433,34 +438,35 @@ function three_init_test_rectprism1(onComplete) {
     if (mode != 241) return;
 
     var valid0 =
-        objects[0].position.x < 12.25 &&
-        objects[0].position.x > -12.25 &&
-        objects[0].position.y < 18.25 &&
-        objects[0].position.y > -18.25 &&
-        objects[0].position.z < 12.25 &&
-        objects[0].position.z > -12.25,
-      valid1 =
-        objects[1].position.x < 12.25 &&
-        objects[1].position.x > -12.25 &&
-        objects[1].position.y < 18.25 &&
-        objects[1].position.y > -18.25 &&
-        objects[1].position.z < 12.25 &&
-        objects[1].position.z > -12.25;
+      objects[0].position.x < 12.25 &&
+      objects[0].position.x > -12.25 &&
+      objects[0].position.y < 18.25 &&
+      objects[0].position.y > -18.25 &&
+      objects[0].position.z < 12.25 &&
+      objects[0].position.z > -12.25;
+    //   ,
+    // valid1 =
+    //   objects[1].position.x < 12.25 &&
+    //   objects[1].position.x > -12.25 &&
+    //   objects[1].position.y < 18.25 &&
+    //   objects[1].position.y > -18.25 &&
+    //   objects[1].position.z < 12.25 &&
+    //   objects[1].position.z > -12.25;
 
-    var msg =
-      valid0 && valid1
-        ? "Both dots are inside the shape."
-        : !valid0 && !valid1
-        ? "Both dots are outside the shape."
-        : !valid0
-        ? "The green dot is outside the shape."
-        : "The yellow dot is outside the shape.";
-
+    // var msg =
+    //   valid0 && valid1
+    //     ? "Both dots are inside the shape."
+    //     : !valid0 && !valid1
+    //     ? "Both dots are outside the shape."
+    //     : !valid0
+    //     ? "The green dot is outside the shape."
+    //     : "The yellow dot is outside the shape.";
+    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
     $("#testResult").html(msg);
 
-    if (valid0 && valid1 && onComplete != null) {
+    if (valid0 && onComplete != null) {
       testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      testResults[testResults.length - 1].endPosition2 = objects[1].position;
+      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
   });
@@ -495,34 +501,35 @@ function three_init_test_rectprism2(onComplete) {
     if (mode != 242) return;
 
     var valid0 =
-        objects[0].position.x < 18.25 &&
-        objects[0].position.x > -18.25 &&
-        objects[0].position.y < 12.25 &&
-        objects[0].position.y > -12.25 &&
-        objects[0].position.z < 12.25 &&
-        objects[0].position.z > -12.25,
-      valid1 =
-        objects[1].position.x < 18.25 &&
-        objects[1].position.x > -18.25 &&
-        objects[1].position.y < 12.25 &&
-        objects[1].position.y > -12.25 &&
-        objects[1].position.z < 12.25 &&
-        objects[1].position.z > -12.25;
+      objects[0].position.x < 18.25 &&
+      objects[0].position.x > -18.25 &&
+      objects[0].position.y < 12.25 &&
+      objects[0].position.y > -12.25 &&
+      objects[0].position.z < 12.25 &&
+      objects[0].position.z > -12.25;
+    //   ,
+    // valid1 =
+    //   objects[1].position.x < 18.25 &&
+    //   objects[1].position.x > -18.25 &&
+    //   objects[1].position.y < 12.25 &&
+    //   objects[1].position.y > -12.25 &&
+    //   objects[1].position.z < 12.25 &&
+    //   objects[1].position.z > -12.25;
 
-    var msg =
-      valid0 && valid1
-        ? "Both dots are inside the shape."
-        : !valid0 && !valid1
-        ? "Both dots are outside the shape."
-        : !valid0
-        ? "The green dot is outside the shape."
-        : "The yellow dot is outside the shape.";
-
+    // var msg =
+    //   valid0 && valid1
+    //     ? "Both dots are inside the shape."
+    //     : !valid0 && !valid1
+    //     ? "Both dots are outside the shape."
+    //     : !valid0
+    //     ? "The green dot is outside the shape."
+    //     : "The yellow dot is outside the shape.";
+    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
     $("#testResult").html(msg);
 
-    if (valid0 && valid1 && onComplete != null) {
+    if (valid0 && onComplete != null) {
       testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      testResults[testResults.length - 1].endPosition2 = objects[1].position;
+      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
   });
@@ -557,35 +564,37 @@ function three_init_test_cylinder1(onComplete) {
     if (mode != 251) return;
 
     var valid0 =
-        objects[0].position.y < 18.25 && objects[0].position.y > -18.25,
-      valid1 = objects[1].position.y < 18.25 && objects[1].position.y > -18.25;
+      objects[0].position.y < 18.25 && objects[0].position.y > -18.25;
+    //   ,
+    // valid1 = objects[1].position.y < 18.25 && objects[1].position.y > -18.25;
 
     var d0 = Math.sqrt(
-        objects[0].position.x * objects[0].position.x +
-          objects[0].position.z * objects[0].position.z
-      ),
-      d1 = Math.sqrt(
-        objects[1].position.x * objects[1].position.x +
-          objects[1].position.z * objects[1].position.z
-      );
+      objects[0].position.x * objects[0].position.x +
+        objects[0].position.z * objects[0].position.z
+    );
+    // ,
+    // d1 = Math.sqrt(
+    //   objects[1].position.x * objects[1].position.x +
+    //     objects[1].position.z * objects[1].position.z
+    // );
 
     valid0 = valid0 && d0 < 14.25;
-    valid1 = valid1 && d1 < 14.25;
+    // valid1 = valid1 && d1 < 14.25;
 
-    var msg =
-      valid0 && valid1
-        ? "Both dots are inside the shape."
-        : !valid0 && !valid1
-        ? "Both dots are outside the shape."
-        : !valid0
-        ? "The green dot is outside the shape."
-        : "The yellow dot is outside the shape.";
-
+    // var msg =
+    //   valid0 && valid1
+    //     ? "Both dots are inside the shape."
+    //     : !valid0 && !valid1
+    //     ? "Both dots are outside the shape."
+    //     : !valid0
+    //     ? "The green dot is outside the shape."
+    //     : "The yellow dot is outside the shape.";
+    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
     $("#testResult").html(msg);
 
-    if (valid0 && valid1 && onComplete != null) {
+    if (valid0 && onComplete != null) {
       testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      testResults[testResults.length - 1].endPosition2 = objects[1].position;
+      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
   });
@@ -621,35 +630,37 @@ function three_init_test_cylinder2(onComplete) {
     if (mode != 252) return;
 
     var valid0 =
-        objects[0].position.x < 18.25 && objects[0].position.x > -18.25,
-      valid1 = objects[1].position.x < 18.25 && objects[1].position.x > -18.25;
+      objects[0].position.x < 18.25 && objects[0].position.x > -18.25;
+    //   ,
+    // valid1 = objects[1].position.x < 18.25 && objects[1].position.x > -18.25;
 
     var d0 = Math.sqrt(
-        objects[0].position.y * objects[0].position.y +
-          objects[0].position.z * objects[0].position.z
-      ),
-      d1 = Math.sqrt(
-        objects[1].position.y * objects[1].position.y +
-          objects[1].position.z * objects[1].position.z
-      );
+      objects[0].position.y * objects[0].position.y +
+        objects[0].position.z * objects[0].position.z
+    );
+    // ,
+    // d1 = Math.sqrt(
+    //   objects[1].position.y * objects[1].position.y +
+    //     objects[1].position.z * objects[1].position.z
+    // );
 
     valid0 = valid0 && d0 < 14.25;
-    valid1 = valid1 && d1 < 14.25;
+    // valid1 = valid1 && d1 < 14.25;
 
-    var msg =
-      valid0 && valid1
-        ? "Both dots are inside the shape."
-        : !valid0 && !valid1
-        ? "Both dots are outside the shape."
-        : !valid0
-        ? "The green dot is outside the shape."
-        : "The yellow dot is outside the shape.";
-
+    // var msg =
+    //   valid0 && valid1
+    //     ? "Both dots are inside the shape."
+    //     : !valid0 && !valid1
+    //     ? "Both dots are outside the shape."
+    //     : !valid0
+    //     ? "The green dot is outside the shape."
+    //     : "The yellow dot is outside the shape.";
+    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
     $("#testResult").html(msg);
 
-    if (valid0 && valid1 && onComplete != null) {
+    if (valid0 && onComplete != null) {
       testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      testResults[testResults.length - 1].endPosition2 = objects[1].position;
+      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
   });
