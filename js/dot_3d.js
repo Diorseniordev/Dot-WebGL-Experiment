@@ -97,7 +97,7 @@ function three_init_test(modeFlag) {
     new THREE.MeshBasicMaterial({ color: 0xffffff })
   );
   plane.visible = false;
-  scene.add(plane);
+  // scene.add(plane);
 
   var cbgeometry = new THREE.PlaneGeometry(50, 50, 8, 8),
     cbmaterials = [];
@@ -119,7 +119,7 @@ function three_init_test(modeFlag) {
   );
   plane2.rotation.x = Math.PI / 2;
   plane2.position.y = -22;
-  scene.add(plane2);
+  // scene.add(plane2);
 
   container.append(renderer.domElement);
 

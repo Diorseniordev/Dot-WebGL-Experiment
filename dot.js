@@ -739,7 +739,7 @@ function do_task() {
   $(instructions_bg_id).hide();
 
   $("#instructions1").html(
-    "<b>Part 1 — Place Dots within Volumes</b><br><br>" +
+    "<b>Part 1 - Place Dots within Volumes</b><br><br>" +
       "On each trial, first click and drag the display to change your view of the pink volume.  Change the view at least four times, to make sure that you see the shape from several different angles and understand its overall structure.  Next, drag the small dot to a location within the volume that looks the most aesthetically pleasing from all views.        Since this part of the experiment contains a very small number of trials, it is critical that you take your time to respond carefully to each.  If more than one location is tied for most aesthetically pleasing, then please just pick one.  After you have finished adjusting the dot's location to look the most aesthetically pleasing from all views, press 'Submit'.</b>"
   );
   $("#instructions1").show();
