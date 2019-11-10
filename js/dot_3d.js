@@ -1,6 +1,14 @@
 var mode = 0;
 
-var scene, camera, renderer, controls, clock, plane, selection, offset, raycaster;
+var scene,
+  camera,
+  renderer,
+  controls,
+  clock,
+  plane,
+  selection,
+  offset,
+  raycaster;
 
 var container, width, height;
 
@@ -13,7 +21,7 @@ function three_disable() {
 }
 
 function three_init_cube() {
-  container = $('#cubeDiv');
+  container = $("#cubeDiv");
   width = container.width();
   height = container.height();
 
@@ -34,7 +42,10 @@ function three_init_cube() {
 
   container.append(renderer.domElement);
 
-  object0 = new THREE.Mesh(new THREE.CubeGeometry(20, 20, 20), new THREE.MeshPhongMaterial({ color: 0xFF00FF }));
+  object0 = new THREE.Mesh(
+    new THREE.CubeGeometry(20, 20, 20),
+    new THREE.MeshPhongMaterial({ color: 0xff00ff })
+  );
   scene.add(object0);
 }
 
@@ -52,7 +63,7 @@ function three_play_cube() {
 }
 
 function three_init_test(modeFlag) {
-  container = $('#testDiv');
+  container = $("#testDiv");
   width = container.width();
   height = container.height();
 
@@ -81,40 +92,59 @@ function three_init_test(modeFlag) {
 
   clock = new THREE.Clock();
 
-  plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(500, 500, 8, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  plane = new THREE.Mesh(
+    new THREE.PlaneBufferGeometry(500, 500, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0xffffff })
+  );
   plane.visible = false;
   scene.add(plane);
 
-  var cbgeometry = new THREE.PlaneGeometry(50, 50, 8, 8), cbmaterials = [];
-  cbmaterials.push(new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide }));
-  cbmaterials.push(new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide }));
+  var cbgeometry = new THREE.PlaneGeometry(50, 50, 8, 8),
+    cbmaterials = [];
+  cbmaterials.push(
+    new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
+  );
+  cbmaterials.push(
+    new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide })
+  );
 
   for (var i = 0; i < cbgeometry.faces.length / 2; i++) {
     cbgeometry.faces[i * 2].materialIndex = (i + Math.floor(i / 8)) % 2;
     cbgeometry.faces[i * 2 + 1].materialIndex = (i + Math.floor(i / 8)) % 2;
   }
 
-  var plane2 = new THREE.Mesh(cbgeometry, new THREE.MeshFaceMaterial(cbmaterials));
+  var plane2 = new THREE.Mesh(
+    cbgeometry,
+    new THREE.MeshFaceMaterial(cbmaterials)
+  );
   plane2.rotation.x = Math.PI / 2;
   plane2.position.y = -22;
   scene.add(plane2);
 
   container.append(renderer.domElement);
 
-  material = new THREE.MeshPhongMaterial({ color: 0xFF00FF });
+  material = new THREE.MeshPhongMaterial({ color: 0xff00ff });
   material.transparent = true;
   material.opacity = 0.5;
-  material.wireframe = true;
+  material.wireframe = false;
 
   objects = [];
 
-  var p1 = { x: Math.floor(Math.random() * 12) - 5.5, y: Math.floor(Math.random() * 46) - 15, z: Math.floor(Math.random() * 12) - 5.5 };
-  p1.x += (p1.x > 0 ? 24.5 : -24.5);
-  p1.z += (p1.z > 0 ? 24.5 : -24.5);
+  var p1 = {
+    x: Math.floor(Math.random() * 12) - 5.5,
+    y: Math.floor(Math.random() * 46) - 15,
+    z: Math.floor(Math.random() * 12) - 5.5
+  };
+  p1.x += p1.x > 0 ? 24.5 : -24.5;
+  p1.z += p1.z > 0 ? 24.5 : -24.5;
 
-  var p2 = { x: Math.floor(Math.random() * 12) - 5.5, y: Math.floor(Math.random() * 46) - 15, z: Math.floor(Math.random() * 12) - 5.5 };
-  p2.x += (p2.x > 0 ? 24.5 : -24.5);
-  p2.z += (p2.z > 0 ? 24.5 : -24.5);
+  var p2 = {
+    x: Math.floor(Math.random() * 12) - 5.5,
+    y: Math.floor(Math.random() * 46) - 15,
+    z: Math.floor(Math.random() * 12) - 5.5
+  };
+  p2.x += p2.x > 0 ? 24.5 : -24.5;
+  p2.z += p2.z > 0 ? 24.5 : -24.5;
 
   // console.log(p1);
   // console.log(p2);
@@ -139,7 +169,7 @@ function three_init_test(modeFlag) {
 
   container.fadeIn();
 
-  container.mousedown(function (event) {
+  container.mousedown(function(event) {
     if (mode != modeFlag) return;
 
     var mouseX = ((event.pageX - container.offset().left) / width) * 2 - 1;
@@ -161,7 +191,7 @@ function three_init_test(modeFlag) {
     }
   });
 
-  container.mousemove(function (event) {
+  container.mousemove(function(event) {
     if (mode != modeFlag) return;
     event.preventDefault();
 
@@ -185,36 +215,54 @@ function three_init_test(modeFlag) {
     }
   });
 
-  container.mouseup(function () {
+  container.mouseup(function() {
     if (mode != modeFlag) return;
     controls.enabled = true;
     selection = null;
   });
 
-  $("#btn3dWireframe").click(function () {
-    if (mode != modeFlag) return;
-    object0.material.wireframe = !object0.material.wireframe;
-  });
+  // $("#btn3dWireframe").click(function () {
+  //   if (mode != modeFlag) return;
+  //   object0.material.wireframe = !object0.material.wireframe;
+  // });
 }
 
 function three_init_test_sphere(onComplete) {
-  testResults.push({ type: 'sphere', r: 20 });
+  testResults.push({ type: "sphere", r: 20 });
 
   three_init_test(21);
 
   object0 = new THREE.Mesh(new THREE.SphereGeometry(20, 24, 24), material);
   object0.position.set(0, 0, 0);
+
+  console.log(object0);
   scene.add(object0);
 
-  $("#btn3dCheck").click(function () {
+  $("#btn3dCheck").click(function() {
     if (mode != 21) return;
 
-    var d0 = Math.sqrt(objects[0].position.x * objects[0].position.x + objects[0].position.y * objects[0].position.y + objects[0].position.z * objects[0].position.z),
-      d1 = Math.sqrt(objects[1].position.x * objects[1].position.x + objects[1].position.y * objects[1].position.y + objects[1].position.z * objects[1].position.z);
+    var d0 = Math.sqrt(
+        objects[0].position.x * objects[0].position.x +
+          objects[0].position.y * objects[0].position.y +
+          objects[0].position.z * objects[0].position.z
+      ),
+      d1 = Math.sqrt(
+        objects[1].position.x * objects[1].position.x +
+          objects[1].position.y * objects[1].position.y +
+          objects[1].position.z * objects[1].position.z
+      );
 
-    var valid0 = d0 < 18.25, valid1 = d1 < 18.25;
+    var valid0 = d0 < 18.25,
+      valid1 = d1 < 18.25;
 
-    var msg = valid0 && valid1 ? "Both dots are inside the shape." : !valid0 && !valid1 ? "Both dots are outside the shape." : !valid0 ? "The green dot is outside the shape." : "The yellow dot is outside the shape.";
+    var msg =
+      valid0 && valid1
+        ? "Both dots are inside the shape."
+        : !valid0 && !valid1
+        ? "Both dots are outside the shape."
+        : !valid0
+        ? "The green dot is outside the shape."
+        : "The yellow dot is outside the shape.";
 
     $("#testResult").html(msg);
 
@@ -235,26 +283,49 @@ function three_render_test_sphere() {
 
 function three_play_test_sphere(onComplete) {
   mode = 21;
+  console.log("three-test");
   three_init_test_sphere(onComplete);
   three_render_test_sphere();
 }
 
 function three_init_test_cube(onComplete) {
-  testResults.push({ type: 'cube', edge: 32 });
+  testResults.push({ type: "cube", edge: 32 });
 
   three_init_test(22);
 
-  object0 = new THREE.Mesh(new THREE.BoxGeometry(32, 32, 32, 12, 12, 12), material);
+  object0 = new THREE.Mesh(
+    new THREE.BoxGeometry(32, 32, 32, 12, 12, 12),
+    material
+  );
   object0.position.set(0, 0, 0);
   scene.add(object0);
 
-  $("#btn3dCheck").click(function () {
+  $("#btn3dCheck").click(function() {
     if (mode != 22) return;
 
-    var valid0 = objects[0].position.x < 14.25 && objects[0].position.x > -14.25 && objects[0].position.y < 14.25 && objects[0].position.y > -14.25 && objects[0].position.z < 14.25 && objects[0].position.z > -14.25,
-      valid1 = objects[1].position.x < 14.25 && objects[1].position.x > -14.25 && objects[1].position.y < 14.25 && objects[1].position.y > -14.25 && objects[1].position.z < 14.25 && objects[1].position.z > -14.25;
+    var valid0 =
+        objects[0].position.x < 14.25 &&
+        objects[0].position.x > -14.25 &&
+        objects[0].position.y < 14.25 &&
+        objects[0].position.y > -14.25 &&
+        objects[0].position.z < 14.25 &&
+        objects[0].position.z > -14.25,
+      valid1 =
+        objects[1].position.x < 14.25 &&
+        objects[1].position.x > -14.25 &&
+        objects[1].position.y < 14.25 &&
+        objects[1].position.y > -14.25 &&
+        objects[1].position.z < 14.25 &&
+        objects[1].position.z > -14.25;
 
-    var msg = valid0 && valid1 ? "Both dots are inside the shape." : !valid0 && !valid1 ? "Both dots are outside the shape." : !valid0 ? "The green dot is outside the shape." : "The yellow dot is outside the shape.";
+    var msg =
+      valid0 && valid1
+        ? "Both dots are inside the shape."
+        : !valid0 && !valid1
+        ? "Both dots are outside the shape."
+        : !valid0
+        ? "The green dot is outside the shape."
+        : "The yellow dot is outside the shape.";
 
     $("#testResult").html(msg);
 
@@ -280,27 +351,48 @@ function three_play_test_cube(onComplete) {
 }
 
 function three_init_test_pyramid(onComplete) {
-  testResults.push({ type: 'pyramid', edge: 36, h: 40 });
+  testResults.push({ type: "pyramid", edge: 36, h: 40 });
 
   three_init_test(23);
 
-  object0 = new THREE.Mesh(new THREE.CylinderGeometry(0, 25, 40, 4, 16), material);
+  object0 = new THREE.Mesh(
+    new THREE.CylinderGeometry(0, 25, 40, 4, 16),
+    material
+  );
   object0.position.set(0, 0, 0);
   scene.add(object0);
 
-  $("#btn3dCheck").click(function () {
+  $("#btn3dCheck").click(function() {
     if (mode != 23) return;
 
-    var valid0 = objects[0].position.y < 18.25 && objects[0].position.y > -18.25,
+    var valid0 =
+        objects[0].position.y < 18.25 && objects[0].position.y > -18.25,
       valid1 = objects[1].position.y < 18.25 && objects[1].position.y > -18.25;
 
-    var validR0 = (20 - objects[0].position.y) * 25 / 40 - 1,
-      validR1 = (20 - objects[1].position.y) * 25 / 40 - 1;
+    var validR0 = ((20 - objects[0].position.y) * 25) / 40 - 1,
+      validR1 = ((20 - objects[1].position.y) * 25) / 40 - 1;
 
-    valid0 = valid0 && (objects[0].position.x + objects[0].position.z) < validR0 && (objects[0].position.x + objects[0].position.z) > -validR0 && (objects[0].position.x - objects[0].position.z) < validR0 && (objects[0].position.x - objects[0].position.z) > -validR0;
-    valid1 = valid1 && (objects[1].position.x + objects[1].position.z) < validR1 && (objects[1].position.x + objects[1].position.z) > -validR1 && (objects[1].position.x - objects[1].position.z) < validR1 && (objects[1].position.x - objects[1].position.z) > -validR1;
+    valid0 =
+      valid0 &&
+      objects[0].position.x + objects[0].position.z < validR0 &&
+      objects[0].position.x + objects[0].position.z > -validR0 &&
+      objects[0].position.x - objects[0].position.z < validR0 &&
+      objects[0].position.x - objects[0].position.z > -validR0;
+    valid1 =
+      valid1 &&
+      objects[1].position.x + objects[1].position.z < validR1 &&
+      objects[1].position.x + objects[1].position.z > -validR1 &&
+      objects[1].position.x - objects[1].position.z < validR1 &&
+      objects[1].position.x - objects[1].position.z > -validR1;
 
-    var msg = valid0 && valid1 ? "Both dots are inside the shape." : !valid0 && !valid1 ? "Both dots are outside the shape." : !valid0 ? "The green dot is outside the shape." : "The yellow dot is outside the shape.";
+    var msg =
+      valid0 && valid1
+        ? "Both dots are inside the shape."
+        : !valid0 && !valid1
+        ? "Both dots are outside the shape."
+        : !valid0
+        ? "The green dot is outside the shape."
+        : "The yellow dot is outside the shape.";
 
     $("#testResult").html(msg);
 
@@ -326,21 +418,43 @@ function three_play_test_pyramid(onComplete) {
 }
 
 function three_init_test_rectprism1(onComplete) {
-  testResults.push({ type: 'prism standing', edge: 28, h: 40 });
+  testResults.push({ type: "prism standing", edge: 28, h: 40 });
 
   three_init_test(241);
 
-  object0 = new THREE.Mesh(new THREE.BoxGeometry(28, 40, 28, 12, 12, 12), material);
+  object0 = new THREE.Mesh(
+    new THREE.BoxGeometry(28, 40, 28, 12, 12, 12),
+    material
+  );
   object0.position.set(0, 0, 0);
   scene.add(object0);
 
-  $("#btn3dCheck").click(function () {
+  $("#btn3dCheck").click(function() {
     if (mode != 241) return;
 
-    var valid0 = objects[0].position.x < 12.25 && objects[0].position.x > -12.25 && objects[0].position.y < 18.25 && objects[0].position.y > -18.25 && objects[0].position.z < 12.25 && objects[0].position.z > -12.25,
-      valid1 = objects[1].position.x < 12.25 && objects[1].position.x > -12.25 && objects[1].position.y < 18.25 && objects[1].position.y > -18.25 && objects[1].position.z < 12.25 && objects[1].position.z > -12.25;
+    var valid0 =
+        objects[0].position.x < 12.25 &&
+        objects[0].position.x > -12.25 &&
+        objects[0].position.y < 18.25 &&
+        objects[0].position.y > -18.25 &&
+        objects[0].position.z < 12.25 &&
+        objects[0].position.z > -12.25,
+      valid1 =
+        objects[1].position.x < 12.25 &&
+        objects[1].position.x > -12.25 &&
+        objects[1].position.y < 18.25 &&
+        objects[1].position.y > -18.25 &&
+        objects[1].position.z < 12.25 &&
+        objects[1].position.z > -12.25;
 
-    var msg = valid0 && valid1 ? "Both dots are inside the shape." : !valid0 && !valid1 ? "Both dots are outside the shape." : !valid0 ? "The green dot is outside the shape." : "The yellow dot is outside the shape.";
+    var msg =
+      valid0 && valid1
+        ? "Both dots are inside the shape."
+        : !valid0 && !valid1
+        ? "Both dots are outside the shape."
+        : !valid0
+        ? "The green dot is outside the shape."
+        : "The yellow dot is outside the shape.";
 
     $("#testResult").html(msg);
 
@@ -366,21 +480,43 @@ function three_play_test_rectprism1(onComplete) {
 }
 
 function three_init_test_rectprism2(onComplete) {
-  testResults.push({ type: 'prism side', edge: 28, h: 40 });
+  testResults.push({ type: "prism side", edge: 28, h: 40 });
 
   three_init_test(242);
 
-  object0 = new THREE.Mesh(new THREE.BoxGeometry(40, 28, 28, 12, 12, 12), material);
+  object0 = new THREE.Mesh(
+    new THREE.BoxGeometry(40, 28, 28, 12, 12, 12),
+    material
+  );
   object0.position.set(0, 0, 0);
   scene.add(object0);
 
-  $("#btn3dCheck").click(function () {
+  $("#btn3dCheck").click(function() {
     if (mode != 242) return;
 
-    var valid0 = objects[0].position.x < 18.25 && objects[0].position.x > -18.25 && objects[0].position.y < 12.25 && objects[0].position.y > -12.25 && objects[0].position.z < 12.25 && objects[0].position.z > -12.25,
-      valid1 = objects[1].position.x < 18.25 && objects[1].position.x > -18.25 && objects[1].position.y < 12.25 && objects[1].position.y > -12.25 && objects[1].position.z < 12.25 && objects[1].position.z > -12.25;
+    var valid0 =
+        objects[0].position.x < 18.25 &&
+        objects[0].position.x > -18.25 &&
+        objects[0].position.y < 12.25 &&
+        objects[0].position.y > -12.25 &&
+        objects[0].position.z < 12.25 &&
+        objects[0].position.z > -12.25,
+      valid1 =
+        objects[1].position.x < 18.25 &&
+        objects[1].position.x > -18.25 &&
+        objects[1].position.y < 12.25 &&
+        objects[1].position.y > -12.25 &&
+        objects[1].position.z < 12.25 &&
+        objects[1].position.z > -12.25;
 
-    var msg = valid0 && valid1 ? "Both dots are inside the shape." : !valid0 && !valid1 ? "Both dots are outside the shape." : !valid0 ? "The green dot is outside the shape." : "The yellow dot is outside the shape.";
+    var msg =
+      valid0 && valid1
+        ? "Both dots are inside the shape."
+        : !valid0 && !valid1
+        ? "Both dots are outside the shape."
+        : !valid0
+        ? "The green dot is outside the shape."
+        : "The yellow dot is outside the shape.";
 
     $("#testResult").html(msg);
 
@@ -406,27 +542,44 @@ function three_play_test_rectprism2(onComplete) {
 }
 
 function three_init_test_cylinder1(onComplete) {
-  testResults.push({ type: 'cylinder standing', r: 16, h: 40 });
+  testResults.push({ type: "cylinder standing", r: 16, h: 40 });
 
   three_init_test(251);
 
-  object0 = new THREE.Mesh(new THREE.CylinderGeometry(16, 16, 40, 20, 16), material);
+  object0 = new THREE.Mesh(
+    new THREE.CylinderGeometry(16, 16, 40, 20, 16),
+    material
+  );
   object0.position.set(0, 0, 0);
   scene.add(object0);
 
-  $("#btn3dCheck").click(function () {
+  $("#btn3dCheck").click(function() {
     if (mode != 251) return;
 
-    var valid0 = objects[0].position.y < 18.25 && objects[0].position.y > -18.25,
+    var valid0 =
+        objects[0].position.y < 18.25 && objects[0].position.y > -18.25,
       valid1 = objects[1].position.y < 18.25 && objects[1].position.y > -18.25;
 
-    var d0 = Math.sqrt(objects[0].position.x * objects[0].position.x + objects[0].position.z * objects[0].position.z),
-      d1 = Math.sqrt(objects[1].position.x * objects[1].position.x + objects[1].position.z * objects[1].position.z);
+    var d0 = Math.sqrt(
+        objects[0].position.x * objects[0].position.x +
+          objects[0].position.z * objects[0].position.z
+      ),
+      d1 = Math.sqrt(
+        objects[1].position.x * objects[1].position.x +
+          objects[1].position.z * objects[1].position.z
+      );
 
     valid0 = valid0 && d0 < 14.25;
     valid1 = valid1 && d1 < 14.25;
 
-    var msg = valid0 && valid1 ? "Both dots are inside the shape." : !valid0 && !valid1 ? "Both dots are outside the shape." : !valid0 ? "The green dot is outside the shape." : "The yellow dot is outside the shape.";
+    var msg =
+      valid0 && valid1
+        ? "Both dots are inside the shape."
+        : !valid0 && !valid1
+        ? "Both dots are outside the shape."
+        : !valid0
+        ? "The green dot is outside the shape."
+        : "The yellow dot is outside the shape.";
 
     $("#testResult").html(msg);
 
@@ -452,28 +605,45 @@ function three_play_test_cylinder1(onComplete) {
 }
 
 function three_init_test_cylinder2(onComplete) {
-  testResults.push({ type: 'cylinder side', r: 16, h: 40 });
+  testResults.push({ type: "cylinder side", r: 16, h: 40 });
 
   three_init_test(252);
 
-  object0 = new THREE.Mesh(new THREE.CylinderGeometry(16, 16, 40, 20, 16), material);
+  object0 = new THREE.Mesh(
+    new THREE.CylinderGeometry(16, 16, 40, 20, 16),
+    material
+  );
   object0.rotateZ(-Math.PI * 0.5);
   object0.position.set(0, 0, 0);
   scene.add(object0);
 
-  $("#btn3dCheck").click(function () {
+  $("#btn3dCheck").click(function() {
     if (mode != 252) return;
 
-    var valid0 = objects[0].position.x < 18.25 && objects[0].position.x > -18.25,
+    var valid0 =
+        objects[0].position.x < 18.25 && objects[0].position.x > -18.25,
       valid1 = objects[1].position.x < 18.25 && objects[1].position.x > -18.25;
 
-    var d0 = Math.sqrt(objects[0].position.y * objects[0].position.y + objects[0].position.z * objects[0].position.z),
-      d1 = Math.sqrt(objects[1].position.y * objects[1].position.y + objects[1].position.z * objects[1].position.z);
+    var d0 = Math.sqrt(
+        objects[0].position.y * objects[0].position.y +
+          objects[0].position.z * objects[0].position.z
+      ),
+      d1 = Math.sqrt(
+        objects[1].position.y * objects[1].position.y +
+          objects[1].position.z * objects[1].position.z
+      );
 
     valid0 = valid0 && d0 < 14.25;
     valid1 = valid1 && d1 < 14.25;
 
-    var msg = valid0 && valid1 ? "Both dots are inside the shape." : !valid0 && !valid1 ? "Both dots are outside the shape." : !valid0 ? "The green dot is outside the shape." : "The yellow dot is outside the shape.";
+    var msg =
+      valid0 && valid1
+        ? "Both dots are inside the shape."
+        : !valid0 && !valid1
+        ? "Both dots are outside the shape."
+        : !valid0
+        ? "The green dot is outside the shape."
+        : "The yellow dot is outside the shape.";
 
     $("#testResult").html(msg);
 
