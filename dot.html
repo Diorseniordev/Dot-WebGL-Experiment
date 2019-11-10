@@ -20,8 +20,8 @@
     </style>
 
     <div style="display: none;"></div>
-    <link rel="stylesheet" type="text/css" href="ani.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="dot.css" />
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 
     <script
       type="text/javascript"
@@ -38,7 +38,7 @@
     <script type="text/javascript" src="js/THREEx.WindowResize.js"></script>
     <script type="text/javascript" src="js/OrbitControls.js"></script>
     <script type="text/javascript" src="js/stats.min.js"></script>
-    <script type="text/javascript" src="js/ani_3d.js"></script>
+    <script type="text/javascript" src="js/dot_3d.js"></script>
 
     <script type="text/javascript">
       function pop(div) {
@@ -112,7 +112,7 @@
       }
     </script>
 
-    <script src="ani.js"></script>
+    <script src="dot.js"></script>
   </head>
 
   <body>
@@ -282,90 +282,6 @@
             ></div>
           </div>
           <p>Experiment <span>0</span> % complete</p>
-        </div>
-
-        <div id="container" style="display: none;">
-          <div id="first">
-            <button
-              id="example1PlayButton"
-              button
-              id="playButton"
-              style="color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;"
-              onclick="play_example1()"
-            >
-              Play Example 1</button
-            ><br /><br />
-            <div id="example_video_container1" class="video_container">
-              <video id="example1" width="400" height="400" preload="auto">
-                <source
-                  src="mp4/cones_30_deg_1_269_359_reverse_padded.mp4"
-                  type="video/mp4"
-                />
-              </video>
-            </div>
-            <button
-              id="example1ResponseButton"
-              button
-              id="responseButton1"
-              style="color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;"
-              onclick="submitChoice1()"
-            >
-              It looked like this</button
-            ><br /><br />
-          </div>
-        </div>
-
-        <div id="second" style="display: none;">
-          <button
-            id="example2PlayButton"
-            button
-            id="playButton"
-            style="color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;"
-            onclick="play_example2()"
-          >
-            Play Example 2</button
-          ><br /><br />
-
-          <div id="example_video_container2" class="video_container">
-            <video id="example2" width="400" height="400" preload="auto">
-              <source
-                src="mp4/cones_30_deg_1_179_269_forward_padded.mp4"
-                type="video/mp4"
-              />
-            </video>
-          </div>
-          <button
-            id="example2ResponseButton"
-            button
-            id="responseButton2"
-            style="color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;"
-            onclick="submitChoice2()"
-          >
-            It looked like this</button
-          ><br /><br />
-        </div>
-      </center>
-    </div>
-
-    <div id="final">
-      <center>
-        <button
-          id="finalAnimationPlayButton"
-          button
-          id="playButton"
-          style="color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;"
-          onclick="play_final()"
-        >
-          Play Final Video</button
-        ><br /><br />
-
-        <div id="final_video_container" class="video_container">
-          <video id="final_video" width="400" height="400" preload="auto">
-            <source
-              src="mp4/cones_30_deg_0_269_359_reverse_padded.mp4"
-              type="video/mp4"
-            />
-          </video>
         </div>
       </center>
     </div>

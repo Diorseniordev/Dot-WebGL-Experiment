@@ -63,7 +63,7 @@ var browser_check_div_id = "BrowserCheckDiv";
 
 var start_stamp = Date.now();
 
-$(window).load(ani_onready);
+$(window).load(dot_onready);
 
 function gradePQs() {
   var formIncomplete = 1;
@@ -99,7 +99,7 @@ function gradePQs() {
   }
 }
 
-function ani_onready() {
+function dot_onready() {
   for (let i = 18; i < 100; i++) {
     $("#age_selector").append("<option value='" + i + "'>" + i + "</option>");
   }
@@ -344,7 +344,7 @@ function validate_demographics() {
     pop("popDiv1");
     // alert('None of the values in the demographics form should be left empty! Please try again. If you prefer not to provide your race, ethnicity, or gender, please select "Prefer not to answer." If you believe you have reached this message in error, please email the experimenter.');
   } else {
-    // $.post( cgibin_dir + "ani_log_demographics.py", { workerid: worker_id,
+    // $.post( cgibin_dir + "dot_log_demographics.py", { workerid: worker_id,
     //                                                     race: race_val, ethnicity: ethnicity_val,
     //                                                     gender: gener_val, age: age_val, uas: user_agent_string } );
     do_instructions6();
@@ -739,8 +739,8 @@ function do_task() {
   $(instructions_bg_id).hide();
 
   $("#instructions1").html(
-    "<b>Task</b><br><br>" +
-      "Please play both example videos below as many times as you need, until you feel familiar with them.  After you've viewed both examples at least once, press 'Next' to view a final test video.  You will then say whether the test video looked more like Example 1 or like Example 2.</b>"
+    "<b>Part 1 — Place Dots within Volumes</b><br><br>" +
+      "On each trial, first click and drag the display to change your view of the pink volume.  Change the view at least four times, to make sure that you see the shape from several different angles and understand its overall structure.  Next, drag the small dot to a location within the volume that looks the most aesthetically pleasing from all views.        Since this part of the experiment contains a very small number of trials, it is critical that you take your time to respond carefully to each.  If more than one location is tied for most aesthetically pleasing, then please just pick one.  After you have finished adjusting the dot's location to look the most aesthetically pleasing from all views, press 'Submit'.</b>"
   );
   $("#instructions1").show();
 
@@ -984,7 +984,7 @@ function gradeDebriefingQuestions() {
     show_cursor();
     total_time_elapsed = Date.now() - start_stamp;
 
-    $.post(cgibin_dir + "ani_log_trial.py", {
+    $.post(cgibin_dir + "dot_log_trial.py", {
       workerid: worker_id,
       gender: gender_val,
       age: age_val,
@@ -1126,7 +1126,7 @@ function validate_worker_id(id_str) {
 
 function check_worker_id_used_before(id_str) {
   $.post(
-    cgibin_dir + "ani_check_workerid.py",
+    cgibin_dir + "dot_check_workerid.py",
     { workerid: id_str },
     check_worker_id_callback
   );
