@@ -81,7 +81,7 @@ function gradePQs() {
   }
 
   if (formIncomplete > 0) {
-    pop("popDiv1");
+    alert("Whoops! Error");
   } else if (formIncomplete == 0 && videoOk == 1) {
     $("#playButton").hide();
     $("#instructions1").hide();
@@ -107,7 +107,7 @@ function dot_onready() {
   $("#example_container").hide();
   $("#final").hide();
   $("#instructions1").show();
-
+  three_play_cube();
   //some initial task setup code here
 
   win_width = $(window).width();
@@ -279,7 +279,7 @@ function do_instructions5a_validate_input() {
     worker_id = user_input_worker_id;
     do_instructions5b();
   } else {
-    pop("popDiv2");
+    alert("Error!!!!");
   }
 }
 
@@ -341,8 +341,9 @@ function validate_demographics() {
     gender_val == "SexEmpty" ||
     age_val == "AgeEmpty"
   ) {
-    pop("popDiv1");
-    // alert('None of the values in the demographics form should be left empty! Please try again. If you prefer not to provide your race, ethnicity, or gender, please select "Prefer not to answer." If you believe you have reached this message in error, please email the experimenter.');
+    alert(
+      'None of the values in the demographics form should be left empty! Please try again. If you prefer not to provide your race, ethnicity, or gender, please select "Prefer not to answer." If you believe you have reached this message in error, please email the experimenter.'
+    );
   } else {
     // $.post( cgibin_dir + "dot_log_demographics.py", { workerid: worker_id,
     //                                                     race: race_val, ethnicity: ethnicity_val,
@@ -859,84 +860,12 @@ function showFinal() {
   $("#final").show();
 }
 
-// function examplesViewed() {
-
-//     //$(next_button_id).hide();
-//     clearTimeout(showNextButton);
-//   $(next_button_id).click(testViewed);
-//   set_object_center( next_button_id, 0, 240 );
-//     $(next_button_id).show();
-
-//   //if (viewedExample1 > 0 && viewedExample2 > 0 && (Date.now()- movie1_play_time) > 3167 && (Date.now()- movie2_play_time) > 3167){
-//       viewedExample1PreTest =viewedExample1;
-//       viewedExample2PreTest =viewedExample2;
-//     // $("#example_container").hide()
-//     // $("#instructions1").html("<b>Task</b><br><br>You will have only one chance to view the test animation.  Press play when you are ready.</b>");
-//     // $("#final").show();
-
-//     //$(next_button_id).hide();
-
-//     time_final_shown = Date.now();
-//   //}
-//    // else{
-//       //pop("popDiv3")
-//   //    bad_subject=1;
-//    // }
-//   }
-
 function showNextButton() {
-  // alert("once")
-  //$(next_button_id).hide();
-
   $(next_button_id).show();
-  //$(next_button_id).off("click");
-
-  //document.getElementById("next_button_id").innerHTML = "X";
-  //$(next_button_id).click(showFinal);
 }
 
 function showNextButtonAgain() {
-  //alert("again")
-  //$(next_button_id).hide();
   $(next_button_id).show();
-  //$(next_button_id).click(testViewed);
-}
-
-function testViewed() {
-  // if (viewedFinal == 1 && (Date.now() - final_movie_play_time) > 3.167){
-  $(next_button_id).hide();
-  $("#final").hide();
-  $("#example_container").show();
-  $("#example1ResponseButton").show();
-  $("#example2ResponseButton").show();
-  $("#instructions1").html(
-    "<b>Task</b><br><br>" +
-      "Which of the following did that video most resemble?  If you're not sure, please just give your best guess.</b>"
-  );
-
-  //$(next_button_id).hide()
-
-  // }
-  //   else{
-  //  pop("popDiv3")
-  //   bad_subject=1;
-  //  }
-}
-
-function submitChoice1() {
-  response = 0;
-  RT = Date.now() - time_final_shown;
-  $("#instructions1").hide();
-  $("#example_container").hide();
-  $(debriefing_questionairre_div_id).show();
-}
-
-function submitChoice2() {
-  response = 1;
-  RT = Date.now() - time_final_shown;
-  $("#instructions1").hide();
-  $("#example_container").hide();
-  $(debriefing_questionairre_div_id).show();
 }
 
 function gradeDebriefingQuestions() {
@@ -976,7 +905,7 @@ function gradeDebriefingQuestions() {
   }
 
   if (formIncomplete > 0) {
-    pop("popDiv1");
+    alert("PopDiv1");
   } else {
     completion_code = generate_completion_code();
 
@@ -1057,14 +986,6 @@ function generate_completion_code() {
     comp_code = comp_code + code_alphabet.charAt(char_ind);
   }
   return comp_code;
-}
-
-function end_break() {
-  $(document).off("click");
-  $(break_text_id).hide();
-  $(break_text_2_id).hide();
-  hide_cursor();
-  setTimeout(do_trials1, iti);
 }
 
 function window_was_resized() {
@@ -1149,61 +1070,6 @@ function getParamFromURL(name) {
   if (results == null) return "";
   else return results[1];
 }
-
-function rotateAnnotationCropper(
-  offsetSelector,
-  xCoordinate,
-  yCoordinate,
-  cropper,
-  face_trial
-) {
-  var x =
-    xCoordinate - offsetSelector.offset().left - offsetSelector.width() / 2;
-  var y =
-    -1 *
-    (yCoordinate - offsetSelector.offset().top - offsetSelector.height() / 2);
-  var theta = Math.atan2(y, x) * (180 / Math.PI);
-
-  var cssDegs = convertThetaToCssDegs(theta);
-
-  var rotate = "rotate(" + cssDegs + "deg)";
-  cropper.css({
-    "-moz-transform": rotate,
-    transform: rotate,
-    "-webkit-transform": rotate,
-    "-ms-transform": rotate
-  });
-  $("body").on("mouseup", function(event) {
-    $("body").unbind("mousemove");
-  });
-
-  output = cssDegs + randomOffset;
-  output = (output % 360) + 1;
-  if (output < 0) {
-    output = 360 + output; // since angles go from 0 to 270 and then -90 back to 0
-  }
-  faceNum = Math.round(output / degreesPerFace);
-  if (faceNum < 1) {
-    faceNum = 1;
-  }
-  // alert(thisMorph)
-  // alert(images[faceNum-1].src)
-  // alert(all_face_image_sets[thisMorph]);
-
-  $("#face").attr(
-    "src",
-    all_face_image_sets[face_order[face_trial]][faceNum - 1].src
-  );
-
-  // element.src = ;
-  return [faceNum, cssDegs, output, xCoordinate, yCoordinate];
-}
-
-function convertThetaToCssDegs(theta) {
-  var cssDegs = 90 - theta;
-  return cssDegs;
-}
-
 function shuffle(o) {
   for (
     var j, x, i = o.length;
@@ -1211,80 +1077,6 @@ function shuffle(o) {
     j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x
   );
   return o;
-}
-
-//randomX = Math.round(Math.random()*);
-function rotateAnnotationCropper_circleExpansion(
-  offsetSelector,
-  xCoordinate,
-  yCoordinate,
-  cropper,
-  expansion
-) {
-  //alert(offsetSelector.left);
-  var x =
-    xCoordinate - offsetSelector.offset().left - offsetSelector.width() / 2;
-  var y =
-    -1 *
-    (yCoordinate - offsetSelector.offset().top - offsetSelector.height() / 2);
-  var theta = Math.atan2(y, x) * (180 / Math.PI);
-
-  var cssDegs = convertThetaToCssDegs(theta);
-  var rotate = "rotate(" + cssDegs + "deg)";
-  cropper.css({
-    "-moz-transform": rotate,
-    transform: rotate,
-    "-webkit-transform": rotate,
-    "-ms-transform": rotate
-  });
-  $("body").on("mouseup", function(event) {
-    $("body").unbind("mousemove");
-  });
-  //return cssDegs;
-  output = cssDegs;
-  output = (output % 360) + 1;
-  if (output < 0) {
-    output = 360 + output; // since angles go from 0 to 270 and then -90 back to 0
-  }
-  expand = Math.round(output / degreesPerStep);
-  if (expand < 1) {
-    expand = 1;
-  }
-
-  if (expand > numSteps / 2) {
-    expand = numSteps - (expand - 1);
-  }
-
-  expand = expand * expansion; // multiply the raw number by the number of pixels each degree step should add
-
-  circleStats = expandCircle(testCircle, expand);
-}
-
-function convertThetaToCssDegs(theta) {
-  var cssDegs = 90 - theta;
-  return cssDegs;
-}
-
-//move and expand
-function expandCircle(circleElement, expand) {
-  var $this = $(circleElement),
-    circle = $this.data(),
-    hoveredX = circle.left + circle.radius,
-    hoveredY = circle.top + circle.radius;
-
-  // change css properties
-  $this.css({
-    width: 2 * circle.radius + expand + "px",
-    height: 2 * circle.radius + expand + "px",
-    left: circle.left - expand / 2 + "px",
-    top: circle.top - expand / 2 + "px",
-    "border-top-left-radius": circle.radius + expand / 2 + "px",
-    "border-top-right-radius": circle.radius + expand / 2 + "px",
-    "border-bottom-left-radius": circle.radius + expand / 2 + "px",
-    "border-bottom-right-radius": circle.radius + expand / 2 + "px"
-  });
-
-  return [circle.left, circle.top, circle.width, circle.height];
 }
 
 function startTimer() {

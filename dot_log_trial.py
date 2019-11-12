@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-output_fname = 'ani_trial_log_{0}.txt' #the placeholder will get filled with the worker ID
+output_fname = 'dot_trial_log_{0}.txt' #the placeholder will get filled with the worker ID
 
 
 import sys, cgi, cgitb, datetime

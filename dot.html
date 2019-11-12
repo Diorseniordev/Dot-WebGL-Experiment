@@ -3,21 +3,7 @@
   <head>
     <title>Perception Experiment</title>
 
-    <style>
-      .ontop {
-        z-index: 999;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        display: none;
-        position: fixed;
-        background-color: #cccccc;
-        color: #aaaaaa;
-        opacity: 0.9;
-        filter: alpha(opacity=95);
-      }
-    </style>
+    <style></style>
 
     <div style="display: none;"></div>
     <link rel="stylesheet" type="text/css" href="dot.css" />
@@ -27,7 +13,7 @@
       type="text/javascript"
       src="http://mbostock.github.com/d3/d3.js?1.29.1"
     ></script>
-    <script type="text/javascript" src="necessary_functions.js"></script>
+
     <script type="text/javascript" src="pace.min.js">
       pace.start();
     </script>
@@ -41,84 +27,15 @@
     <script type="text/javascript" src="js/dot_3d.js"></script>
 
     <script type="text/javascript">
-      function pop(div) {
-        document.getElementById(div).style.display = "block";
-      }
-      function hide(div) {
-        document.getElementById(div).style.display = "none";
-      }
       //To detect escape button
       document.onkeydown = function(evt) {
         evt = evt || window.event;
       };
     </script>
-
-    <script>
-      function play() {
-        // document.getElementById("padded").play();
-        // document.getElementById("playButton").innerHTML = "X";
-        // document.getElementById("playButton").onclick = "";
-      }
-
-      $(document).ready(function() {
-        three_play_cube();
-      });
-    </script>
-
-    <script>
-      function play_example1() {
-        document.getElementById("example1").play();
-        if (viewedExample1 < 1) {
-          movie1_play_time = Date.now();
-        }
-        viewedExample1 += 1;
-
-        if ((viewedExample1 == 1) & (viewedExample2 == 1)) {
-          //alert("doing1")
-          setTimeout(showNextButton, 3167);
-        }
-        //document.getElementById("playButton").innerHTML = "X";
-        //document.getElementById("playButton").onclick = "";
-      }
-    </script>
-
-    <script>
-      function play_example2() {
-        document.getElementById("example2").play();
-        if (viewedExample2 < 1) {
-          movie2_play_time = Date.now();
-        }
-        viewedExample2 += 1;
-        if ((viewedExample1 == 1) & (viewedExample2 == 1)) {
-          // alert("doing1")
-          setTimeout(showNextButton, 3167);
-        } //document.getElementById("playButton").innerHTML = "X";
-        //document.getElementById("playButton").onclick = "";
-      }
-    </script>
-
-    <script>
-      function play_final() {
-        setTimeout(showNextButtonAgain, 3167);
-
-        if (viewedFinal < 1) {
-          final_movie_play_time = Date.now();
-        }
-        viewedFinal = 1;
-
-        document.getElementById("final_video").play();
-        document.getElementById("finalAnimationPlayButton").innerHTML = "X";
-        document.getElementById("finalAnimationPlayButton").onclick = "";
-      }
-    </script>
-
     <script src="dot.js"></script>
   </head>
 
   <body>
-    <div type="hidden" class="output">
-      <p id="totalPageTime"></p>
-    </div>
     <script type="text/javascript"></script>
     <center>
       <br />
@@ -188,9 +105,6 @@
       </div>
     </center>
 
-    <div type="hidden" class="output">
-      <p id="totalPageTime"></p>
-    </div>
     <script type="text/javascript"></script>
 
     <!-- Main js script goes in a separate document -->
@@ -213,15 +127,6 @@
     </div>
     <div id="nextbutton">NEXT</div>
     <div id="backbutton">BACK</div>
-
-    <div id="winresized">
-      It looks like the window was resized during the previous trial!<br /><br />Unfortunately,
-      resizing your window disrupts the task and invalidates your results.<br /><br />If
-      you believe you have reached this message in error, please email the
-      experimenter.<br /><br />You can also try the HIT again, but you will have
-      to start over at the beginning. If you don't want to do that, please
-      return the HIT.
-    </div>
 
     <div id="mobilebrowser">
       It looks like you're trying to acess this HIT from a mobile device or
@@ -336,7 +241,7 @@
 
         <textarea
           id="dq3"
-          minlength="1"
+          minlength="20"
           type="text"
           cols="180"
           rows="4"
@@ -351,7 +256,7 @@
 
         <textarea
           id="dq4"
-          minlength="1"
+          minlength="20"
           type="text"
           cols="180"
           rows="4"
@@ -363,7 +268,7 @@
 
         <textarea
           id="dq5"
-          minlength="1"
+          minlength="20"
           type="text"
           cols="180"
           rows="4"
@@ -375,7 +280,7 @@
 
         <textarea
           id="dq6"
-          minlength="1"
+          minlength="20"
           type="text"
           cols="180"
           rows="4"
@@ -387,7 +292,7 @@
 
         <textarea
           id="dq7"
-          minlength="1"
+          minlength="20"
           type="text"
           cols="180"
           rows="4"

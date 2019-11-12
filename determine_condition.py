@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-worker_db_fname = 'ani_completed_worker_log.txt'
+worker_db_fname = 'dot_completed_worker_log.txt'
 # file format: tab-delimited text
 # fields: worker id, timestamp of completion, completion code
 
@@ -130,8 +130,8 @@ for this_line in all_lines:
         condition_30_list.append(this_condition)
     elif this_condition == '31':
         condition_31_list.append(this_condition)
-    elif this_condition == '32':
-        condition_32_list.append(this_condition)
+    # elif this_condition == '32':
+    #     condition_32_list.append(this_condition)
 
 
 

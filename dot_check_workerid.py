@@ -1,23 +1,26 @@
 #!/usr/bin/python
 
-worker_db_fname = 'ani_completed_worker_log.txt'
+import os.path
+import cgitb
+import cgi
+import sys
+worker_db_fname = 'dot_completed_worker_log.txt'
 # file format: tab-delimited text
 # fields: worker id, timestamp of completion, completion code
 
-import sys, cgi, cgitb, os.path
 
 cgitb.enable(display=0, logdir="pylogs")
 
 formdata = cgi.FieldStorage()
 
-workerid     = formdata.getvalue("workerid",      "WORKERID_NULL")
+workerid = formdata.getvalue("workerid",      "WORKERID_NULL")
 
 sys.stdout.write('Content-type: text/plain; charset=UTF-8\n\n')
 if (workerid == "WORKERID_NULL") or (workerid == ""):
     sys.stdout.write('error')
     sys.exit()
 
-if (not os.path.isfile( worker_db_fname )):
+if (not os.path.isfile(worker_db_fname)):
     sys.stdout.write('unused')
     sys.exit()
 
@@ -30,8 +33,8 @@ except:
     sys.exit()
 
 for this_line in all_lines:
-    this_line = this_line.strip( '\n' )
-    this_line_cells = this_line.split( '\t' )
+    this_line = this_line.strip('\n')
+    this_line_cells = this_line.split('\t')
     this_workerid = this_line_cells[0]
     if (workerid == this_workerid):
         sys.stdout.write('used')
