@@ -38,7 +38,7 @@ var viewedFinal = 0;
 var cgibin_dir; // will get prepended to Python script names; leave as empty string if no such dir
 //  n.b., if it does exist, remember to end with trailing slash!
 //cgibin_dir = "/cgi-bin/";    //for localhost testing
-cgibin_dir = ""; //for Dreamhost server
+cgibin_dir = "api/"; //for Dreamhost server
 
 var instructions_id = "#instructions";
 var instructions_bg_id = "#instructions_bg";
@@ -733,7 +733,7 @@ function do_instructions9() {
 function do_task() {
   set_object_center(next_button_id, 0, 240);
   $(next_button_id).off("click");
-  $(next_button_id).click(showFinal);
+
   $(next_button_id).hide();
   $(back_button_id).hide();
   $(instructions_id).hide();
@@ -750,49 +750,6 @@ function do_task() {
   $("#example2ResponseButton").hide();
 
   $("#testMode3d").hide();
-
-  // var testMode = $("#testMode3d select").val();
-
-  // if (testMode == '21') {
-  //   three_play_test_sphere();
-  // } else if (testMode == '22') {
-  //   three_play_test_cube();
-  // } else if (testMode == '23') {
-  //   three_play_test_pyramid();
-  // } else if (testMode == '241') {
-  //   three_play_test_rectprism1();
-  // } else if (testMode == '242') {
-  //   three_play_test_rectprism2();
-  // } else if (testMode == '251') {
-  //   three_play_test_cylinder1();
-  // } else if (testMode == '252') {
-  //   three_play_test_cylinder2();
-  // }
-
-  // var testMode = Math.floor(Math.random() * 7);
-
-  // if (testMode == 0) {
-  //   console.log("sphere");
-  //   three_play_test_sphere();
-  // } else if (testMode == 1) {
-  //   console.log("cube");
-  //   three_play_test_cube();
-  // } else if (testMode == 2) {
-  //   console.log("pyramid");
-  //   three_play_test_pyramid();
-  // } else if (testMode == 3) {
-  //   console.log("rectangle prism standing");
-  //   three_play_test_rectprism1();
-  // } else if (testMode == 4) {
-  //   console.log("rectangle prism side");
-  //   three_play_test_rectprism2();
-  // } else if (testMode == 5) {
-  //   console.log("cylinder standing");
-  //   three_play_test_cylinder1();
-  // } else if (testMode == 6) {
-  //   console.log("cylinder side");
-  //   three_play_test_cylinder2();
-  // }
 
   loop_task();
 }
@@ -830,34 +787,23 @@ function loop_task() {
   }
 }
 
-function go_next_task() {
-  testMode++;
-  if (testMode == 1) {
-    $("#instructions1").hide();
-    $("#example_container").hide();
-    three_disable();
-    $(debriefing_questionairre_div_id).show();
-    console.log(testResults);
-  } else {
-    setTimeout(() => {
-      loop_task();
-    }, 1000);
-  }
-}
+// function go_next_task() {
+//   testMode++;
+//   if (testMode == 1) {
+//     $("#instructions1").hide();
+//     $("#example_container").hide();
+//     three_disable();
+//     $(debriefing_questionairre_div_id).show();
+//     console.log(testResults);
+//   } else {
+//     setTimeout(() => {
+//       loop_task();
+//     }, 1000);
+//   }
+// }
 
 function showFinal() {
   $(next_button_id).off("click");
-  $(next_button_id).click(testViewed);
-  $(next_button_id).hide();
-
-  time_final_shown = Date.now();
-  viewedExample1PreTest = viewedExample1;
-  viewedExample2PreTest = viewedExample2;
-  $("#example_container").hide();
-  $("#instructions1").html(
-    "<b>Task</b><br><br>You will have only one chance to view the test animation.  Press play when you are ready.</b>"
-  );
-  $("#final").show();
 }
 
 function showNextButton() {

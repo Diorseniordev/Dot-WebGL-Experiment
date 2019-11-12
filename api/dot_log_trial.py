@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe
 
 output_fname = 'dot_trial_log_{0}.txt' #the placeholder will get filled with the worker ID
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe
 
 worker_db_fname = 'dot_completed_worker_log.txt'
 # file format: tab-delimited text
@@ -170,39 +170,7 @@ if len(condition_14_list)<=max(lengths) and len(condition_14_list)<5:
     possible_conditions.append('14')
 if len(condition_15_list)<=max(lengths) and len(condition_15_list)<5:
     possible_conditions.append('15')
-#
-#if len(condition_16_list)<=max(lengths) and len(condition_16_list)<5:
-#    possible_conditions.append('16')
-#if len(condition_17_list)<=max(lengths) and len(condition_17_list)<5:
-#    possible_conditions.append('17')
-#if len(condition_18_list)<=max(lengths) and len(condition_18_list)<5:
-#    possible_conditions.append('18')
-#if len(condition_19_list)<=max(lengths) and len(condition_19_list)<5:
-#    possible_conditions.append('19')
-#if len(condition_20_list)<=max(lengths) and len(condition_20_list)<5:
-#    possible_conditions.append('20')
-#if len(condition_21_list)<=max(lengths) and len(condition_21_list)<5:
-#    possible_conditions.append('21')
-#if len(condition_22_list)<=max(lengths) and len(condition_22_list)<5:
-#    possible_conditions.append('22')
-#if len(condition_23_list)<=max(lengths) and len(condition_23_list)<5:
-#    possible_conditions.append('23')
-#if len(condition_24_list)<=max(lengths) and len(condition_24_list)<5:
-#    possible_conditions.append('24')
-#if len(condition_25_list)<=max(lengths) and len(condition_25_list)<5:
-#    possible_conditions.append('25')
-#if len(condition_26_list)<=max(lengths) and len(condition_26_list)<5:
-#    possible_conditions.append('26')
-#if len(condition_27_list)<=max(lengths) and len(condition_27_list)<5:
-#    possible_conditions.append('27')
-#if len(condition_28_list)<=max(lengths) and len(condition_28_list)<5:
-#    possible_conditions.append('28')
-#if len(condition_29_list)<=max(lengths) and len(condition_29_list)<5:
-#    possible_conditions.append('29')
-#if len(condition_30_list)<=max(lengths) and len(condition_30_list)<5:
-#    possible_conditions.append('30')
-#if len(condition_31_list)<=max(lengths) and len(condition_31_list)<5:
-#    possible_conditions.append('31')
+
 
 
 condition = random.choice(possible_conditions)
@@ -210,9 +178,3 @@ condition = random.choice(possible_conditions)
 
 sys.stdout.write(condition)
 
-
-#    if (workerid == this_workerid):
-#        sys.stdout.write('used')
-#        sys.exit()
-
-#sys.stdout.write(bad_subject)
