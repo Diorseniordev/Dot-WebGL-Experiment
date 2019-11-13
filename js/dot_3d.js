@@ -234,7 +234,7 @@ function three_init_test_sphere(onComplete) {
 
   object0 = new THREE.Mesh(new THREE.SphereGeometry(20, 24, 24), material);
   object0.position.set(0, 0, 0);
-
+  object0.name = "sphere";
   console.log(object0);
   scene.add(object0);
 

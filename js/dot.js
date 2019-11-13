@@ -70,6 +70,7 @@ function gradePQs() {
   var videoOk = 0;
 
   var a1 = document.getElementsByName("pq1");
+
   for (i = 0; i < a1.length; i++) {
     if (a1[i].checked) {
       formIncomplete = 0;
@@ -80,6 +81,8 @@ function gradePQs() {
     }
   }
 
+  formIncomplete = 0;
+  videoOk = 1;
   if (formIncomplete > 0) {
     alertMX("Please choose correct answer.");
   } else if (formIncomplete == 0 && videoOk == 1) {
@@ -504,7 +507,7 @@ var testMode = 0;
 function loop_task() {
   $("#testResult").html("");
 
-  var progress = Math.round((testMode * 100) / 1);
+  var progress = Math.round((testMode * 100) / 7);
   $("#testProgress > div > div").css("width", progress + "%");
   $("#testProgress span").html(progress);
 
@@ -534,16 +537,14 @@ function loop_task() {
 
 function go_next_task() {
   testMode++;
-  if (testMode == 1) {
+  if (testMode == 7) {
     $("#instructions1").hide();
     $("#example_container").hide();
     three_disable();
     $(debriefing_questionairre_div_id).show();
     console.log(testResults);
   } else {
-    setTimeout(() => {
-      loop_task();
-    }, 1000);
+    loop_task();
   }
 }
 

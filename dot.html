@@ -160,11 +160,13 @@
       </form>
     </div>
     <div class="demo_popup" id="demographics_sex_popup">
-      If you do not wish to provide this information, feel free to select "prefer not to answer" in the dropdown menu.
+      If you do not wish to provide this information, feel free to select
+      "prefer not to answer" in the dropdown menu.
     </div>
 
     <div class="demo_popup" id="demographics_age_popup">
-        Your age, in years. If you are under age 18, unfortunately you are not eligibile to participate in this experiment.
+      Your age, in years. If you are under age 18, unfortunately you are not
+      eligibile to participate in this experiment.
     </div>
     <div id="example_container">
       <center>
@@ -317,5 +319,31 @@
         /><br /><br /><br />
       </form>
     </div>
+    <script type="text/javascript">
+      setTimeout(function() {
+        $("#playButton").hide();
+        $("#instructions1").hide();
+
+        $(BrowserCheck_div_id).hide();
+        document.body.style.background = "White ";
+        do_instructions1();
+        do_instructions1a();
+        do_instructions2();
+        do_instructions2a();
+        do_instructions3();
+        do_instructions4();
+        do_instructions5();
+        $("#mturk_worker_id_input").val("A1234123412124");
+        do_instructions5a_validate_input();
+        do_instructions5b();
+        $("#gender_selector").val("Male");
+        $("#age_selector").val("34");
+        worker_id_used_before = 0;
+        do_instructions6();
+        do_instructions8();
+        do_instructions9();
+        do_task();
+      }, 50);
+    </script>
   </body>
 </html>
