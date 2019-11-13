@@ -105,7 +105,7 @@ function dot_onready() {
   }
 
   $("#example_container").hide();
-  $("#final").hide();
+
   $("#instructions1").show();
   three_play_cube();
   //some initial task setup code here
@@ -118,8 +118,7 @@ function dot_onready() {
   //hide demographic survey
 
   $(demographics_div_id).hide();
-  $("#demographics_race_popup").hide();
-  $("#demographics_ethnicity_popup").hide();
+
   $("#demographics_sex_popup").hide();
   $("#demographics_age_popup").hide();
 
@@ -428,308 +427,6 @@ function do_instructions8() {
   }
 }
 
-function do_instructions9() {
-  $(instructions_id).html(
-    "<b>Instructions</b><br><br>" +
-      "The experiment takes about 1 minute to complete. " +
-      "Please stay focused throughout, since your data will be useful to us only if you remain engaged."
-  );
-
-  set_object_center(instructions_id, 0, 0);
-
-  // conditions 0-7 and 16-23: matched video is on the left, and decoy is on the right
-  // conditions 8-15 and 24-31: matched video is on the right, and decoy is on the left
-  // 0-15: flip decoy (the decoy is 180 degrees rotated and horizontally flipped relative to the match)
-  // 16-31: flip matched and final video (has the same effect)
-
-  //condition = 0;
-
-  if (condition == 0) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_-1_89_forward_padded.mp4";
-    movieName = "cones_30_deg_0_-1_89_forward_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_-1_89_forward_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_89_179_reverse_padded.mp4";
-
-    // document.querySelector("example2").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 0;
-    motion_toward_me = 0;
-    match_side = 0; //left
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 1) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_-1_89_reverse_padded.mp4";
-
-    movieName = "cones_30_deg_0_-1_89_reverse_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_-1_89_reverse_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_89_179_forward_padded.mp4";
-
-    // document.querySelector("#example2").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 0;
-    motion_toward_me = 1;
-    match_side = 0; //left
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 2) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_89_179_forward_padded.mp4";
-    movieName = "cones_30_deg_0_89_179_forward_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_89_179_forward_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_-1_89_reverse_padded.mp4";
-
-    // document.querySelector("#example2").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 1;
-    motion_toward_me = 0;
-    match_side = 0; //left
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 3) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_89_179_reverse_padded.mp4";
-    movieName = "cones_30_deg_0_89_179_reverse_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_89_179_reverse_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_-1_89_forward_padded.mp4";
-
-    // document.querySelector("#example2").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 1;
-    motion_toward_me = 1;
-    match_side = 0; //left
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 4) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_179_269_forward_padded.mp4";
-    movieName = "cones_30_deg_0_179_269_forward_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_179_269_forward_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_269_359_reverse_padded.mp4";
-
-    // document.querySelector("#example2").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 2;
-    motion_toward_me = 1;
-    match_side = 0; //left
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 5) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_179_269_reverse_padded.mp4";
-    movieName = "cones_30_deg_0_179_269_reverse_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_179_269_reverse_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_269_359_forward_padded.mp4";
-
-    // document.querySelector("#example2").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 2;
-    motion_toward_me = 0;
-    match_side = 0; //left
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 6) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_269_359_forward_padded.mp4";
-    movieName = "cones_30_deg_0_269_359_forward_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_269_359_forward_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_179_269_reverse_padded.mp4";
-
-    // document.querySelector("#example2").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 3;
-    motion_toward_me = 1;
-    match_side = 0; //left
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 7) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_269_359_reverse_padded.mp4";
-    movieName = "cones_30_deg_0_269_359_reverse_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_269_359_reverse_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_179_269_forward_padded.mp4";
-
-    // document.querySelector("#example2").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 3;
-    motion_toward_me = 0;
-    match_side = 0; //left
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 8) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_-1_89_forward_padded.mp4";
-    movieName = "cones_30_deg_0_-1_89_forward_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_-1_89_forward_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_89_179_reverse_padded.mp4";
-
-    // document.querySelector("#example1").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 0;
-    motion_toward_me = 0;
-    match_side = 1; //right
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 9) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_-1_89_reverse_padded.mp4";
-    movieName = "cones_30_deg_0_-1_89_reverse_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_-1_89_reverse_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_89_179_forward_padded.mp4";
-
-    // document.querySelector("#example1").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 0;
-    motion_toward_me = 1;
-    match_side = 1; //right
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 10) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_89_179_forward_padded.mp4";
-    movieName = "cones_30_deg_0_89_179_forward_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_89_179_forward_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_-1_89_reverse_padded.mp4";
-
-    // document.querySelector("#example1").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 1;
-    motion_toward_me = 0;
-    match_side = 1; //right
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 11) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_89_179_reverse_padded.mp4";
-    movieName = "cones_30_deg_0_89_179_reverse_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_89_179_reverse_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_-1_89_forward_padded.mp4";
-
-    // document.querySelector("#example1").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 1;
-    motion_toward_me = 1;
-    match_side = 1; //right
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 12) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_179_269_forward_padded.mp4";
-    movieName = "cones_30_deg_0_179_269_forward_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_179_269_forward_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_269_359_reverse_padded.mp4";
-
-    // document.querySelector("#example1").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 2;
-    motion_toward_me = 1;
-    match_side = 1; //right
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 13) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_179_269_reverse_padded.mp4";
-    movieName = "cones_30_deg_0_179_269_reverse_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_179_269_reverse_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_269_359_forward_padded.mp4";
-
-    // document.querySelector("#example1").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 2;
-    motion_toward_me = 0;
-    match_side = 1; //right
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 14) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_269_359_forward_padded.mp4";
-    movieName = "cones_30_deg_0_269_359_forward_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_269_359_forward_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_179_269_reverse_padded.mp4";
-
-    // document.querySelector("#example1").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 3;
-    motion_toward_me = 1;
-    match_side = 1; //right
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  } else if (condition == 15) {
-    document.querySelector("#final_video").src =
-      "mp4/cones_30_deg_0_269_359_reverse_padded.mp4";
-    movieName = "cones_30_deg_0_269_359_reverse_padded.mp4";
-    document.querySelector("#example2").src =
-      "mp4/cones_30_deg_1_269_359_reverse_padded.mp4";
-    document.querySelector("#example1").src =
-      "mp4/cones_30_deg_1_179_269_forward_padded.mp4";
-
-    // document.querySelector("#example1").style.cssText = "-moz-transform: scale(-1, 1); \
-    // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-    // transform: scale(-1, 1); filter: FlipH;";
-
-    which_quarter = 3;
-    motion_toward_me = 0;
-    match_side = 1; //right
-    overall_flip = 0; //the match and final video are not flipped, but the decoy is
-  }
-
-  // document.querySelector("#final_video").load()
-  // document.querySelector("#example1").load()
-  // document.querySelector("#example2").load()
-
-  //$('#testMode3d').show();
-
-  $(next_button_id).off("click");
-  $(next_button_id).click(do_task);
-  $(back_button_id).click(do_instructions8);
-}
-
 function do_task() {
   set_object_center(next_button_id, 0, 240);
   $(next_button_id).off("click");
@@ -787,20 +484,20 @@ function loop_task() {
   }
 }
 
-// function go_next_task() {
-//   testMode++;
-//   if (testMode == 1) {
-//     $("#instructions1").hide();
-//     $("#example_container").hide();
-//     three_disable();
-//     $(debriefing_questionairre_div_id).show();
-//     console.log(testResults);
-//   } else {
-//     setTimeout(() => {
-//       loop_task();
-//     }, 1000);
-//   }
-// }
+function go_next_task() {
+  testMode++;
+  if (testMode == 1) {
+    $("#instructions1").hide();
+    $("#example_container").hide();
+    three_disable();
+    $(debriefing_questionairre_div_id).show();
+    console.log(testResults);
+  } else {
+    setTimeout(() => {
+      loop_task();
+    }, 1000);
+  }
+}
 
 function showFinal() {
   $(next_button_id).off("click");
