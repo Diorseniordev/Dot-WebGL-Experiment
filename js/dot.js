@@ -81,7 +81,7 @@ function gradePQs() {
   }
 
   if (formIncomplete > 0) {
-    alert("Whoops! Error");
+    alertMX("Please choose correct answer.");
   } else if (formIncomplete == 0 && videoOk == 1) {
     $("#playButton").hide();
     $("#instructions1").hide();
@@ -165,8 +165,8 @@ function do_instructions1() {
   $(instructions_bg_id).show();
   $(instructions_id).html(
     "<b>Informed Consent Form</b><br><br>" +
-      "<b>Purpose:</b> We are conducting research on visual perception.<br><br>" +
-      "<b>Procedures:</b> This experiment takes about 3 minutes, and it is divided into two parts.  In Part One you will make simple judgments about short animations. In Part Two you will answer some questions about the experiment. We will give you specific instructions about how to complete these tasks before they begin.  You will receive $0.20 upon completing the experiment.<br><br>" +
+      "Hello, we are the New School for Social Research Perception Lab, and we invite you to take part in the following research study if you are eligible.<br><br>" +
+      "This study concerns perception and attention.  As a subject in the experiment, you will examine a computer display with some simple visual and/or auditory stimuli, and will respond by pressing some keys and/or using the computer mouse.  You may also answer some demographic questions and questions about personality and lifestyle.  Please note that the study is restricted to 18-35 year olds with normal or corrected-to-normal vision.<br><br>" +
       "(Click the NEXT button to continue.)"
   );
 
@@ -180,40 +180,81 @@ function do_instructions1() {
   $(back_button_id).hide();
   //$(next_button_id).click( do_instructions2 );
 
-  $(next_button_id).click(do_task);
+  $(next_button_id).click(do_instructions1a);
 }
+function do_instructions1a() {
+  $("#instructions1").hide();
+  $("#video_container").hide();
 
+  $(back_button_id).show();
+  $(next_button_id).show();
+  $(instructions_id).show();
+  $(instructions_bg_id).show();
+  $(instructions_id).html(
+    "<b>Informed Consent Form</b><br><br>" +
+      "The experiment will take approximately [5, 30, 60] minutes, and will involve no discomfort, surprise, or deception.  There are no risks to your health of any kind.  Due to the nature of psychology experiments, we cannot explain the precise purpose of the experiment until after the session is over.  However, afterwards you will receive a debriefing form that explains the research, and the experimenter will also be happy to answer any further questions you might have about the procedure<br><br>" +
+      "(Click the NEXT button to continue.)"
+  );
+
+  set_object_center(instructions_bg_id, 0, 0);
+  set_object_center(instructions_id, 0, 0);
+  set_object_center(next_button_id, 100, 300);
+  set_object_center(back_button_id, -100, 300);
+  $(next_button_id).off("click");
+  $(back_button_id).off("click");
+  $(back_button_id).css("cursor", "pointer");
+  $(next_button_id).css("cursor", "pointer");
+  $(back_button_id).click(do_instructions1);
+  $(next_button_id).click(do_instructions2);
+}
 function do_instructions2() {
   $(instructions_id).html(
     "<b>Informed Consent Form</b><br><br>" +
-      "<b>Risks and Benefits:</b> Completing these tasks poses no more risk of harm to you than do the experiences of everyday life (e.g., from working on a computer). Although this study will not benefit you personally, it will contribute to the advancement of our understanding of perception.<br><br>" +
-      "<b>Confidentiality:</b> All of the responses you provide during this study will be anonymous. You will not be asked to provide any identifying information, such as your name, in any of the questionnaires. Typically, only the researchers involved in this study and those responsible for research oversight will have access to the information you provide. However, we may also share the data with other researchers so that they can check the accuracy of our conclusions; this will not impact you because the data are anonymous.<br><br>" +
+      "While you will not directly benefit from taking part in this research study, we hope society will benefit from the knowledge gained.<br><br>" +
+      "The research data will be collected anonymously.  This means we will not have any links between the data and your personally identifiable information (such as an email-address, name, IP address, student number, etc).  But note that despite our best efforts, there is the possibility of intrusion by outside agents (i.e. hacking), particularly when information is shared over the internet.<br><br>" +
       "(Click the NEXT button to continue.)"
   );
 
   set_object_center(instructions_id, 0, 0);
-  set_object_center(next_button_id, 100, 275);
-  set_object_center(back_button_id, -100, 275);
+  set_object_center(next_button_id, 100, 300);
+  set_object_center(back_button_id, -100, 300);
+  $(back_button_id).show();
+  $(next_button_id).off("click");
+  $(back_button_id).off("click");
+  $(next_button_id).click(do_instructions2a);
+  $(back_button_id).click(do_instructions1);
+}
+function do_instructions2a() {
+  $(instructions_id).html(
+    "<b>Informed Consent Form</b><br><br>" +
+      "Your responses to the stimuli and additional survey questions may be published in an anonomyzed form.  Moreover, an anonymized version of the data from this study may also be made publicly accessible via the Open Science Framework (osf.io; US-hosted), and this without obtaining additional written consent.  Such data sharing is an effort to increase the potential benefit of this research to society, for example by allowing other researchers to compare their results to ours.  In this spirit, the data will be made available indefinitely to any researcher who wants them, and the purpose and scope of this secondary use is not foreseeable.  While this data sharing is anonymous and therefore poses no risks to you, it will also not benefit you directly.  You will not be contacted again about this reuse. <br><br>" +
+      "(Click the NEXT button to continue.)"
+  );
+
+  set_object_center(instructions_id, 0, 0);
+  set_object_center(next_button_id, 100, 300);
+  set_object_center(back_button_id, -100, 300);
   $(back_button_id).show();
   $(next_button_id).off("click");
   $(back_button_id).off("click");
   $(next_button_id).click(do_instructions3);
-  $(back_button_id).click(do_instructions1);
+  $(back_button_id).click(do_instructions2);
 }
-
 function do_instructions3() {
   $(instructions_id).html(
     "<b>Informed Consent Form</b><br><br>" +
-      "<b>Questions:</b> If you have any questions about this study, you may contact us.<br><br>" +
-      "If you would like to talk with someone other than the researchers to discuss problems or concerns, to discuss situations in the event that a member of the research team is not available, or to discuss your rights as a research participant, you may contact:<br><br>" +
-      "<br>" +
-      "" +
+      "<b>Questions:</b> If you have any questions about the research study, please contact the researcher:" +
+      "Jim Farlow: jim.farlow@newcastle.edu<br><br>" +
+      "If you have further questions about OSF, please contact them here: https://www.osf-global.com/contact .<br>" +
+      "If you have any questions about your rights as a research subject, or have research related complaints, please contact the Human Protections Administrator, via phone: 646.909.2768, or email: hrpp@newschool.edu<br><br>" +
+      "Taking part in this study is voluntary.  You can stop at any time.  Withdrawal or refusal to participate will not result in any penalty.  You do not waive any legal rights or release The New School or its agents from liability for negligence by consenting to participate.<br><br>" +
       "" +
       "" +
       "(Click the NEXT button to continue.)"
   );
 
   $(next_button_id).text("NEXT");
+  $(back_button_id).text("BACK");
   set_object_center(instructions_id, 0, 0);
   $(next_button_id).off("click");
   $(back_button_id).off("click");
@@ -225,12 +266,11 @@ function do_instructions4() {
   $(demographics_div_id).hide(); //in case they hit "back" from the demographics form
   $(instructions_id).html(
     "<b>Informed Consent Form</b><br><br>" +
-      '<b>Agreement to participate:</b> By clicking the "Consent/Next" button below, you acknowledge that you have read the above information, and agree to participate in the study.<br><br>' +
-      "You must be at least 18 years of age to participate; agreeing to participate confirms you are 18 years of age or older.<br><br>" +
-      "(Click the CONSENT/NEXT button to confirm your agreement and continue.)"
+      "<b>Agreement to participate:</b><br><br> I confirm that I am between 18 and 35 years old, have normal or corrected-to-normal visual acuity, consent to my anonymized data being made available online, and agree to participate in this research study. <br><br> Please select: <b>YES</b>  or  <b>NO</b>"
   );
 
-  $(next_button_id).text("CONSENT/NEXT");
+  $(next_button_id).text("Yes");
+  $(back_button_id).text("No");
   set_object_center(instructions_id, 0, 0);
 
   $(next_button_id).off("click");
@@ -240,6 +280,7 @@ function do_instructions4() {
 }
 
 function do_instructions5() {
+  $(back_button_id).text("BACK");
   // do demographics questionnaire here, also get MTurk ID if we couldn't get it from the URL
   if (worker_id_used_before == 1)
     //they've done this before; crash out
@@ -278,15 +319,16 @@ function do_instructions5a_validate_input() {
     worker_id = user_input_worker_id;
     do_instructions5b();
   } else {
-    alert("Error!!!!");
+    //pop("popDiv2");
+    alertMX(
+      "It looks like you put in something that is not a valid format for an M-Turk worker ID! Please try again. If you believe you have reached this message in error, please email."
+    );
   }
 }
 
 function do_instructions5b() {
   $(instructions_id).html("");
   $(demographics_div_id).show();
-  attach_popup("#race_selector", "#demographics_race_popup");
-  attach_popup("#ethnicity_selector", "#demographics_ethnicity_popup");
   attach_popup("#gender_selector", "#demographics_sex_popup");
   attach_popup("#age_selector", "#demographics_age_popup");
 
@@ -329,24 +371,14 @@ function do_worker_id_used_error() {
 
 function validate_demographics() {
   //going to just hard-code object IDs here, so sue me...
-  race_val = $("#race_selector").val();
-  ethnicity_val = $("#ethnicity_selector").val();
+
   gender_val = $("#gender_selector").val();
   age_val = $("#age_selector").val();
 
-  if (
-    race_val == "RaceEmpty" ||
-    ethnicity_val == "EthnicityEmpty" ||
-    gender_val == "SexEmpty" ||
-    age_val == "AgeEmpty"
-  ) {
-    alert(
-      'None of the values in the demographics form should be left empty! Please try again. If you prefer not to provide your race, ethnicity, or gender, please select "Prefer not to answer." If you believe you have reached this message in error, please email the experimenter.'
-    );
+  if (gender_val == "SexEmpty" || age_val == "AgeEmpty") {
+    //pop("popDiv1");
+    alertMX("Please select age and gender");
   } else {
-    // $.post( cgibin_dir + "dot_log_demographics.py", { workerid: worker_id,
-    //                                                     race: race_val, ethnicity: ethnicity_val,
-    //                                                     gender: gener_val, age: age_val, uas: user_agent_string } );
     do_instructions6();
   }
 }
@@ -427,6 +459,22 @@ function do_instructions8() {
   }
 }
 
+function do_instructions9() {
+  $(instructions_id).html(
+    "<b>Instructions</b><br><br>" +
+      "The experiment takes about 1 minute to complete. " +
+      "Please stay focused throughout, since your data will be useful to us only if you remain engaged."
+  );
+
+  set_object_center(instructions_id, 0, 0);
+
+  //condition = 0;
+
+  $(next_button_id).off("click");
+  $(next_button_id).click(do_task);
+  $(back_button_id).click(do_instructions8);
+}
+
 function do_task() {
   set_object_center(next_button_id, 0, 240);
   $(next_button_id).off("click");
@@ -499,24 +547,12 @@ function go_next_task() {
   }
 }
 
-function showFinal() {
-  $(next_button_id).off("click");
-}
-
-function showNextButton() {
-  $(next_button_id).show();
-}
-
-function showNextButtonAgain() {
-  $(next_button_id).show();
-}
-
 function gradeDebriefingQuestions() {
   var i;
   var formIncomplete = 1;
 
   var a1 = document.getElementsByName("dq1");
-  formIncomplete = 1;
+  var lengthstrict = 1;
   for (i = 0; i < a1.length; i++) {
     if (a1[i].checked) {
       formIncomplete = 0;
@@ -537,18 +573,20 @@ function gradeDebriefingQuestions() {
   dq7_text = document.getElementById("dq7").value;
 
   if (
-    dq2_text == "" ||
-    dq3_text == "" ||
-    dq4_text == "" ||
-    dq5_text == "" ||
-    dq6_text == "" ||
-    dq7_text == ""
+    dq2_text.length >= 20 &&
+    dq3_text.length >= 20 &&
+    dq4_text.length >= 20 &&
+    dq5_text.length >= 20 &&
+    dq6_text.length >= 20 &&
+    dq7_text.length >= 20
   ) {
-    formIncomplete = 1;
+    lengthstrict = 0;
   }
 
-  if (formIncomplete > 0) {
-    alert("PopDiv1");
+  if (formIncomplete > 0 || lengthstrict > 0) {
+    alertMX(
+      "Please answer all questions on this page, typing at least 20 characters per question"
+    );
   } else {
     completion_code = generate_completion_code();
 
@@ -556,7 +594,7 @@ function gradeDebriefingQuestions() {
     show_cursor();
     total_time_elapsed = Date.now() - start_stamp;
 
-    $.post(cgibin_dir + "dot_log_trial.py", {
+    $.post(cgibin_dir + "EM_log_trial.py", {
       workerid: worker_id,
       gender: gender_val,
       age: age_val,
@@ -569,7 +607,7 @@ function gradeDebriefingQuestions() {
       overall_flip,
       response,
       RT,
-      movieName,
+
       admitted_switching_windows: switchedWindows,
       summarize_instructions: dq2_text,
       clear_enough: dq3_text,
@@ -722,21 +760,6 @@ function shuffle(o) {
   return o;
 }
 
-function startTimer() {
-  if (seconds < 0) {
-    clearInterval(timer);
-  } else {
-    seconds--;
-  }
-}
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if (new Date().getTime() - start > milliseconds) {
-      break;
-    }
-  }
-}
 function do_failedBrowserCheck() {
   $(instructions_id).html(
     "<b>Invalid Browser!</b><br><br>" +
@@ -773,4 +796,19 @@ function determine_condition_callback(check_status) {
     alert("Abort: experiment sample reached!");
   }
   console.log(condition);
+}
+
+function alertMX(t) {
+  $("body").append(
+    $("<div id='boxMX'><p class='msgMX'></p><p>CLOSE</p></div>")
+  );
+  $(".msgMX").text(t);
+  var popMargTop = ($("#boxMX").height() + 24) / 2,
+    popMargLeft = ($("#boxMX").width() + 24) / 2;
+  $("#boxMX")
+    .css({ "margin-top": -popMargTop, "margin-left": -popMargLeft })
+    .fadeIn(600);
+  $("#boxMX").click(function() {
+    $(this).remove();
+  });
 }
