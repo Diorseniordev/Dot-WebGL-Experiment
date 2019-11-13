@@ -180,7 +180,7 @@ function do_instructions1() {
   $(back_button_id).hide();
   //$(next_button_id).click( do_instructions2 );
 
-  $(next_button_id).click(do_instructions9);
+  $(next_button_id).click(do_task);
 }
 
 function do_instructions2() {
