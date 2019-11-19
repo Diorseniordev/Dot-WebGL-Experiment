@@ -9,16 +9,18 @@ request_body = sys.stdin.read(content_length)
 json_data = json.loads(request_body)
 
 # Headers
-TEST_HEADERS = ["worker_id", "gender", "age",
-                "win_resized", "total_time", "condition", "admitted_switching_windows", "summarize_instructions", "clear_enough", "heard_of", "display_problems", "how_well", "decision_criterion", "comp_code"]
+TEST_HEADERS = ["type", "edge", "h",
+                "r", "totalTime", "startPosition", "viewedOrder", "viewedTime"]
+
+
 # Check if parameters have been supplied
 if 'turkID' in json_data:
 
-    f = open('dot_log_trial_%s.txt' %
+    f = open('dot_volume_%s.txt' %
              (json_data['turkID']), 'w')
     f.write(" \t".join(TEST_HEADERS) + "\n")
     for row in json_data['data_content']:
-        f.write("\t".join([str(row[str(c)])
+        f.write("\t".join([str(row[str(c).rstrip()])
                            for c in TEST_HEADERS]) + "\n")
 
     f.close()

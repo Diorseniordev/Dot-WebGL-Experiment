@@ -60,7 +60,31 @@ var worker_id_valid;
 var worker_id_used_before = -1; //-2:error, -1:undefined, 0:unused, 1:used
 var user_agent_string = navigator.userAgent;
 var browser_check_div_id = "BrowserCheckDiv";
+var trial_start, trial_time;
 
+var testArr = [
+  "sphere",
+  "cube",
+  "pyramid",
+  "rectangle prism standing",
+  "rectangle prism side",
+  "cylinder standing",
+  "cylinder side"
+];
+var resultVolumeJSON = {
+  cube: { type: "cube", edge: 32, r: "", h: "" },
+  sphere: { type: "sphere", r: 20 },
+  pyramid: { type: "pyramid", edge: 36, h: 40, r: "" },
+  "rectangle prism standing": {
+    type: "prism standing",
+    edge: 28,
+    r: "",
+    h: 40
+  },
+  "rectangle prism side": { type: "prism side", edge: 28, r: "", h: 40 },
+  "cylinder standing": { type: "cylinder standing", edge: "", r: 16, h: 40 },
+  "cylinder side": { type: "cylinder side", edge: "", r: 16, h: 40 }
+};
 var start_stamp = Date.now();
 
 $(window).load(dot_onready);
@@ -497,54 +521,82 @@ function do_task() {
   $("#example1ResponseButton").hide();
   $("#example2ResponseButton").hide();
 
-  $("#testMode3d").hide();
-
+  $("#testCount3d").hide();
+  testArr = shuffle(testArr);
   loop_task();
 }
 
-var testMode = 0;
+var testCount = 0;
 
 function loop_task() {
   $("#testResult").html("");
-
-  var progress = Math.round((testMode * 100) / 7);
+  trial_start = Date.now();
+  var progress = Math.round((testCount * 100) / 7);
   $("#testProgress > div > div").css("width", progress + "%");
   $("#testProgress span").html(progress);
-
-  if (testMode == 0) {
-    console.log("sphere");
-    three_play_test_sphere(go_next_task);
-  } else if (testMode == 1) {
-    console.log("cube");
-    three_play_test_cube(go_next_task);
-  } else if (testMode == 2) {
-    console.log("pyramid");
-    three_play_test_pyramid(go_next_task);
-  } else if (testMode == 3) {
-    console.log("rectangle prism standing");
-    three_play_test_rectprism1(go_next_task);
-  } else if (testMode == 4) {
-    console.log("rectangle prism side");
-    three_play_test_rectprism2(go_next_task);
-  } else if (testMode == 5) {
-    console.log("cylinder standing");
-    three_play_test_cylinder1(go_next_task);
-  } else if (testMode == 6) {
-    console.log("cylinder side");
-    three_play_test_cylinder2(go_next_task);
+  switch (testArr[testCount]) {
+    case "cube":
+      console.log("cube");
+      three_play_test_cube(go_next_task);
+      break;
+    case "sphere":
+      console.log("sphere");
+      three_play_test_sphere(go_next_task);
+      break;
+    case "pyramid":
+      console.log("pyramid");
+      three_play_test_pyramid(go_next_task);
+      break;
+    case "rectangle prism standing":
+      console.log("rectangle prism standing");
+      three_play_test_rectprism1(go_next_task);
+      break;
+    case "rectangle prism side":
+      console.log("rectangle prism side");
+      three_play_test_rectprism2(go_next_task);
+      break;
+    case "cylinder standing":
+      console.log("cylinder standing");
+      three_play_test_cylinder1(go_next_task);
+      break;
+    case "cylinder side":
+      console.log("cylinder side");
+      three_play_test_cylinder2(go_next_task);
+      break;
+    default:
+      break;
   }
 }
 
 function go_next_task() {
-  testMode++;
-  if (testMode == 7) {
-    $("#instructions1").hide();
-    $("#example_container").hide();
-    three_disable();
-    $(debriefing_questionairre_div_id).show();
-    console.log(testResults);
+  trial_time = (Date.now() - trial_start) / 1000;
+  if (camera.userData.viewedAxis < 1) {
+    alertMX("Subjects should see the volume from at least 4 different views");
+  } else if (trial_time < 1) {
+    alertMX("Subjects should spent more than 20 seconds on this trial");
   } else {
-    loop_task();
+    console.log(testArr[testCount]);
+    testResults.push(resultVolumeJSON[testArr[testCount]]);
+    testResults[testResults.length - 1].startPosition = p1;
+    testResults[testResults.length - 1].endPosition = objects[0].position;
+    testResults[testResults.length - 1].totalTime = trial_time;
+    testResults[testResults.length - 1].viewedTime = camera.userData.viewedTime;
+    testResults[testResults.length - 1].viewedOrder =
+      camera.userData.viewedOrder;
+    testCount++;
+    if (testCount == 1) {
+      $("#instructions1").hide();
+      $("#example_container").hide();
+      three_disable();
+      let post_data = new PostData(cgibin_dir + "dot_log_volume.py");
+      post_data.post(
+        JSON.stringify({ turkID: worker_id, data_content: testResults })
+      );
+      $(debriefing_questionairre_div_id).show();
+      console.log(testResults);
+    } else {
+      loop_task();
+    }
   }
 }
 
@@ -594,30 +646,47 @@ function gradeDebriefingQuestions() {
     $(debriefing_questionairre_div_id).hide();
     show_cursor();
     total_time_elapsed = Date.now() - start_stamp;
-
-    $.post(cgibin_dir + "EM_log_trial.py", {
-      workerid: worker_id,
-      gender: gender_val,
-      age: age_val,
-      win_resized: win_resize_trial_invalid,
-      total_time: total_time_elapsed,
-      condition,
-      which_quarter,
-      motion_toward_me,
-      match_side,
-      overall_flip,
-      response,
-      RT,
-
-      admitted_switching_windows: switchedWindows,
-      summarize_instructions: dq2_text,
-      clear_enough: dq3_text,
-      heard_of: dq4_text,
-      display_problems: dq5_text,
-      how_well: dq6_text,
-      decision_criterion: dq7_text,
-      comp_code: completion_code
-    });
+    let post_data = new PostData(cgibin_dir + "dot_log_trial.py");
+    let complete_datas = [];
+    let complete_data = {};
+    complete_data.worker_id = worker_id;
+    complete_data.gender = gender_val;
+    complete_data.age = age_val;
+    complete_data.win_resized = win_resize_trial_invalid;
+    complete_data.total_time = total_time_elapsed;
+    complete_data.condition = 1;
+    complete_data.admitted_switching_windows = switchedWindows;
+    complete_data.summarize_instructions = dq2_text;
+    complete_data.clear_enough = dq3_text;
+    complete_data.heard_of = dq4_text;
+    complete_data.display_problems = dq5_text;
+    complete_data.how_well = dq6_text;
+    complete_data.decision_criterion = dq7_text;
+    complete_data.comp_code = completion_code;
+    complete_datas.push(complete_data);
+    // console.log(complete_data);
+    post_data.post(
+      JSON.stringify({
+        turkID: worker_id,
+        data_content: complete_datas
+      })
+    );
+    // $.post(cgibin_dir + "dot_log_trial.py", {
+    //   workerid: worker_id,
+    //   gender: gender_val,
+    //   age: age_val,
+    //   win_resized: win_resize_trial_invalid,
+    //   total_time: total_time_elapsed,
+    //   condition,
+    //   admitted_switching_windows: switchedWindows,
+    //   summarize_instructions: dq2_text,
+    //   clear_enough: dq3_text,
+    //   heard_of: dq4_text,
+    //   display_problems: dq5_text,
+    //   how_well: dq6_text,
+    //   decision_criterion: dq7_text,
+    //   comp_code: completion_code
+    // });
 
     $(instructions_id).show();
     $(instructions_bg_id).show();
@@ -812,4 +881,28 @@ function alertMX(t) {
   $("#boxMX").click(function() {
     $(this).remove();
   });
+}
+class PostData {
+  constructor(url) {
+    this._url = url;
+  }
+
+  post(data) {
+    this._xhr = new XMLHttpRequest();
+    this._xhr.onreadystatechange = this._onreadystatechange;
+    this._xhr.open("POST", this._url);
+    this._xhr.setRequestHeader(
+      "Content-Type",
+      "application/json; charset=UTF-8"
+    );
+    this._xhr.send(data);
+  }
+
+  _onreadystatechange() {
+    console.log("hello");
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      let r = JSON.parse(this.response);
+      console.log(r);
+    }
+  }
 }

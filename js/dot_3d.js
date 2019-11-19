@@ -8,10 +8,32 @@ var scene,
   plane,
   selection,
   offset,
-  raycaster;
+  raycaster,
+  p1;
 
 var container, width, height;
+var views = [
+  new THREE.Vector3(120, 0, 0),
+  new THREE.Vector3(-120, 0, 0),
+  new THREE.Vector3(0, 120, 0),
+  new THREE.Vector3(0, -120, 0),
+  new THREE.Vector3(0, 0, 120),
+  new THREE.Vector3(0, 0, -120),
+  new THREE.Vector3(120 * Math.SQRT1_2, 120 * Math.SQRT1_2, 0),
+  new THREE.Vector3(-120 * Math.SQRT1_2, 120 * Math.SQRT1_2, 0),
+  new THREE.Vector3(120 * Math.SQRT1_2, -120 * Math.SQRT1_2, 0),
+  new THREE.Vector3(-120 * Math.SQRT1_2, -120 * Math.SQRT1_2, 0),
+  new THREE.Vector3(0, 120 * Math.SQRT1_2, 120 * Math.SQRT1_2),
+  new THREE.Vector3(0, -120 * Math.SQRT1_2, 120 * Math.SQRT1_2),
+  new THREE.Vector3(0, 120 * Math.SQRT1_2, -120 * Math.SQRT1_2),
+  new THREE.Vector3(0, -120 * Math.SQRT1_2, -120 * Math.SQRT1_2),
+  new THREE.Vector3(120 * Math.SQRT1_2, 0, 120 * Math.SQRT1_2),
+  new THREE.Vector3(-120 * Math.SQRT1_2, 0, 120 * Math.SQRT1_2),
+  new THREE.Vector3(120 * Math.SQRT1_2, 0, -120 * Math.SQRT1_2),
+  new THREE.Vector3(-120 * Math.SQRT1_2, 0, -120 * Math.SQRT1_2)
+];
 
+var selectedView;
 var object0, objects, material;
 
 var testResults = [];
@@ -66,14 +88,27 @@ function three_init_test(modeFlag) {
   container = $("#testDiv");
   width = container.width();
   height = container.height();
-
+  // console.log(views);
   container.find("canvas").remove();
   container.hide();
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
   scene.add(camera);
-  camera.position.set(0, 50, 100);
+  selectedView = Math.floor(Math.random() * 18);
+  let pos = views[selectedView];
+  camera.userData = {
+    selectedView: selectedView,
+    views: views,
+    viewedCount: Array(18).fill(0),
+    viewedTime: Array(18).fill(0),
+    viewedAxis: 0,
+    viewedOrder: [],
+    startView: Date.now()
+  };
+  // console.log(selectedView);
+  camera.position.set(pos.x, pos.y, pos.z);
+
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -130,7 +165,7 @@ function three_init_test(modeFlag) {
 
   objects = [];
 
-  var p1 = {
+  p1 = {
     x: Math.floor(Math.random() * 12) - 5.5,
     y: Math.floor(Math.random() * 46) - 15,
     z: Math.floor(Math.random() * 12) - 5.5
@@ -138,19 +173,18 @@ function three_init_test(modeFlag) {
   p1.x += p1.x > 0 ? 24.5 : -24.5;
   p1.z += p1.z > 0 ? 24.5 : -24.5;
 
-  var p2 = {
-    x: Math.floor(Math.random() * 12) - 5.5,
-    y: Math.floor(Math.random() * 46) - 15,
-    z: Math.floor(Math.random() * 12) - 5.5
-  };
-  p2.x += p2.x > 0 ? 24.5 : -24.5;
-  p2.z += p2.z > 0 ? 24.5 : -24.5;
+  // var p2 = {
+  //   x: Math.floor(Math.random() * 12) - 5.5,
+  //   y: Math.floor(Math.random() * 46) - 15,
+  //   z: Math.floor(Math.random() * 12) - 5.5
+  // };
+  // p2.x += p2.x > 0 ? 24.5 : -24.5;
+  // p2.z += p2.z > 0 ? 24.5 : -24.5;
 
   // console.log(p1);
   // console.log(p2);
 
-  testResults[testResults.length - 1].startPosition1 = p1;
-  testResults[testResults.length - 1].startPosition2 = p2;
+  // testResults[testResults.length - 1].startPosition2 = p2;
 
   var material2 = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
   var object2 = new THREE.Mesh(new THREE.SphereGeometry(2, 10, 10), material2);
@@ -228,14 +262,12 @@ function three_init_test(modeFlag) {
 }
 
 function three_init_test_sphere(onComplete) {
-  testResults.push({ type: "sphere", r: 20 });
-
   three_init_test(21);
 
   object0 = new THREE.Mesh(new THREE.SphereGeometry(20, 24, 24), material);
   object0.position.set(0, 0, 0);
   object0.name = "sphere";
-  console.log(object0);
+  // console.log(object0);
   scene.add(object0);
 
   $("#btn3dCheck").click(function() {
@@ -269,8 +301,6 @@ function three_init_test_sphere(onComplete) {
 
     // if (valid0 && valid1 && onComplete != null) {
     if (valid0 && onComplete != null) {
-      testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
   });
@@ -280,7 +310,7 @@ function three_render_test_sphere() {
   if (mode != 21) return;
   requestAnimationFrame(three_render_test_sphere);
   renderer.render(scene, camera);
-  controls.update(clock.getDelta());
+  // controls.update(clock.getDelta());
 }
 
 function three_play_test_sphere(onComplete) {
@@ -291,8 +321,6 @@ function three_play_test_sphere(onComplete) {
 }
 
 function three_init_test_cube(onComplete) {
-  testResults.push({ type: "cube", edge: 32 });
-
   three_init_test(22);
 
   object0 = new THREE.Mesh(
@@ -333,7 +361,7 @@ function three_init_test_cube(onComplete) {
     $("#testResult").html(msg);
 
     if (valid0 && onComplete != null) {
-      testResults[testResults.length - 1].endPosition1 = objects[0].position;
+      // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
@@ -344,7 +372,7 @@ function three_render_test_cube() {
   if (mode != 22) return;
   requestAnimationFrame(three_render_test_cube);
   renderer.render(scene, camera);
-  controls.update(clock.getDelta());
+  // controls.update(clock.getDelta());
 }
 
 function three_play_test_cube(onComplete) {
@@ -354,8 +382,6 @@ function three_play_test_cube(onComplete) {
 }
 
 function three_init_test_pyramid(onComplete) {
-  testResults.push({ type: "pyramid", edge: 36, h: 40 });
-
   three_init_test(23);
 
   object0 = new THREE.Mesh(
@@ -402,7 +428,7 @@ function three_init_test_pyramid(onComplete) {
     $("#testResult").html(msg);
 
     if (valid0 && onComplete != null) {
-      testResults[testResults.length - 1].endPosition1 = objects[0].position;
+      // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
@@ -413,7 +439,7 @@ function three_render_test_pyramid() {
   if (mode != 23) return;
   requestAnimationFrame(three_render_test_pyramid);
   renderer.render(scene, camera);
-  controls.update(clock.getDelta());
+  // controls.update(clock.getDelta());
 }
 
 function three_play_test_pyramid(onComplete) {
@@ -423,8 +449,6 @@ function three_play_test_pyramid(onComplete) {
 }
 
 function three_init_test_rectprism1(onComplete) {
-  testResults.push({ type: "prism standing", edge: 28, h: 40 });
-
   three_init_test(241);
 
   object0 = new THREE.Mesh(
@@ -465,7 +489,7 @@ function three_init_test_rectprism1(onComplete) {
     $("#testResult").html(msg);
 
     if (valid0 && onComplete != null) {
-      testResults[testResults.length - 1].endPosition1 = objects[0].position;
+      // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
@@ -476,7 +500,7 @@ function three_render_test_rectprism1() {
   if (mode != 241) return;
   requestAnimationFrame(three_render_test_rectprism1);
   renderer.render(scene, camera);
-  controls.update(clock.getDelta());
+  // controls.update(clock.getDelta());
 }
 
 function three_play_test_rectprism1(onComplete) {
@@ -486,8 +510,6 @@ function three_play_test_rectprism1(onComplete) {
 }
 
 function three_init_test_rectprism2(onComplete) {
-  testResults.push({ type: "prism side", edge: 28, h: 40 });
-
   three_init_test(242);
 
   object0 = new THREE.Mesh(
@@ -528,7 +550,7 @@ function three_init_test_rectprism2(onComplete) {
     $("#testResult").html(msg);
 
     if (valid0 && onComplete != null) {
-      testResults[testResults.length - 1].endPosition1 = objects[0].position;
+      // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
@@ -539,7 +561,7 @@ function three_render_test_rectprism2() {
   if (mode != 242) return;
   requestAnimationFrame(three_render_test_rectprism2);
   renderer.render(scene, camera);
-  controls.update(clock.getDelta());
+  // controls.update(clock.getDelta());
 }
 
 function three_play_test_rectprism2(onComplete) {
@@ -549,8 +571,6 @@ function three_play_test_rectprism2(onComplete) {
 }
 
 function three_init_test_cylinder1(onComplete) {
-  testResults.push({ type: "cylinder standing", r: 16, h: 40 });
-
   three_init_test(251);
 
   object0 = new THREE.Mesh(
@@ -593,7 +613,7 @@ function three_init_test_cylinder1(onComplete) {
     $("#testResult").html(msg);
 
     if (valid0 && onComplete != null) {
-      testResults[testResults.length - 1].endPosition1 = objects[0].position;
+      // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
@@ -604,7 +624,7 @@ function three_render_test_cylinder1() {
   if (mode != 251) return;
   requestAnimationFrame(three_render_test_cylinder1);
   renderer.render(scene, camera);
-  controls.update(clock.getDelta());
+  // controls.update(clock.getDelta());
 }
 
 function three_play_test_cylinder1(onComplete) {
@@ -614,8 +634,6 @@ function three_play_test_cylinder1(onComplete) {
 }
 
 function three_init_test_cylinder2(onComplete) {
-  testResults.push({ type: "cylinder side", r: 16, h: 40 });
-
   three_init_test(252);
 
   object0 = new THREE.Mesh(
@@ -659,7 +677,7 @@ function three_init_test_cylinder2(onComplete) {
     $("#testResult").html(msg);
 
     if (valid0 && onComplete != null) {
-      testResults[testResults.length - 1].endPosition1 = objects[0].position;
+      // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
       onComplete();
     }
@@ -670,7 +688,7 @@ function three_render_test_cylinder2() {
   if (mode != 252) return;
   requestAnimationFrame(three_render_test_cylinder2);
   renderer.render(scene, camera);
-  controls.update(clock.getDelta());
+  // controls.update(clock.getDelta());
 }
 
 function three_play_test_cylinder2(onComplete) {
