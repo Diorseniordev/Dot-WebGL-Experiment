@@ -221,16 +221,22 @@ THREE.OrbitControls = function(object, domElement) {
       scope.domElement === document ? scope.domElement.body : scope.domElement;
 
     if (state === STATE.ROTATE) {
-      rotateEnd.set(event.clientX, event.clientY);
-      rotateDelta.subVectors(rotateEnd, rotateStart);
-      thetaDelta = (2 * Math.PI * rotateDelta.x) / element.clientWidth;
-      phiDelta = (2 * Math.PI * rotateDelta.y) / element.clientHeight;
-      // rotating across whole screen goes 360 degrees around
+      if (event.button === 0) {
+        rotateEnd.set(event.clientX, event.clientY);
+        rotateDelta.subVectors(rotateEnd, rotateStart);
 
-      rotateStart.copy(rotateEnd);
+        thetaDelta = (2 * Math.PI * rotateDelta.x) / element.clientWidth;
+        phiDelta = (2 * Math.PI * rotateDelta.y) / element.clientHeight;
+        // rotating across whole screen goes 360 degrees around
+
+        rotateStart.copy(rotateEnd);
+        if (rotateDelta.length() > 30) {
+          scope.update();
+        }
+      }
     }
     // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
-    scope.update();
+
     // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
 
     scope.domElement.removeEventListener("mouseup", onMouseUp, false);

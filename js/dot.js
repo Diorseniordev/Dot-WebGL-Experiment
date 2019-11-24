@@ -584,22 +584,33 @@ function go_next_task() {
     testResults[testResults.length - 1].viewedOrder =
       camera.userData.viewedOrder;
     testCount++;
-    if (testCount == 1) {
-      $("#instructions1").hide();
-      $("#example_container").hide();
+    if (testCount == 2) {
+      // $("#instructions1").hide();
+      // $("#example_container").hide();
       three_disable();
       let post_data = new PostData(cgibin_dir + "dot_log_volume.py");
       post_data.post(
         JSON.stringify({ turkID: worker_id, data_content: testResults })
       );
-      $(debriefing_questionairre_div_id).show();
-      console.log(testResults);
+      // $(debriefing_questionairre_div_id).show();
+      // console.log(testResults);a
+      do_task();
     } else {
       loop_task();
     }
   }
 }
-
+function do_task2() {
+  $("#testDiv").hide();
+  $("#example_container center").prepend(
+    "<canvas id='c'></canvas><p> <span id='box' class='diagram left'></span>I love boxes<p><span id='pyramid' class='diagram right'></span>When I was a kid</p>"
+  );
+  $("#instructions1").html(
+    "<b>Part 2 - Which Looks More Aesthetically Pleasing?</b><br><br>" +
+      "On each trial, please indicate whether the dot's position within the volume is more aesthetically pleasing in the left or the right display.  This part of the experiment is a bit longer than Part 1.  Please try to stay focused and respond carefully, since your data will be useful to us only if you remain engaged!</b>"
+  );
+  three_init_part2();
+}
 function gradeDebriefingQuestions() {
   var i;
   var formIncomplete = 1;
