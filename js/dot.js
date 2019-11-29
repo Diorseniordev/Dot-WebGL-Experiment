@@ -594,16 +594,16 @@ function go_next_task() {
       );
       // $(debriefing_questionairre_div_id).show();
       // console.log(testResults);a
-      do_task();
+      do_task2();
     } else {
       loop_task();
     }
   }
 }
 function do_task2() {
-  $("#testDiv").hide();
-  $("#example_container center").prepend(
-    "<canvas id='c'></canvas><p> <span id='box' class='diagram left'></span>I love boxes<p><span id='pyramid' class='diagram right'></span>When I was a kid</p>"
+  $("#example_container").hide();
+  $("body").append(
+    "<div id='part2_container' style='display:block; text-align:-webkit-center; padding-left:50px;'></div>"
   );
   $("#instructions1").html(
     "<b>Part 2 - Which Looks More Aesthetically Pleasing?</b><br><br>" +
@@ -682,22 +682,6 @@ function gradeDebriefingQuestions() {
         data_content: complete_datas
       })
     );
-    // $.post(cgibin_dir + "dot_log_trial.py", {
-    //   workerid: worker_id,
-    //   gender: gender_val,
-    //   age: age_val,
-    //   win_resized: win_resize_trial_invalid,
-    //   total_time: total_time_elapsed,
-    //   condition,
-    //   admitted_switching_windows: switchedWindows,
-    //   summarize_instructions: dq2_text,
-    //   clear_enough: dq3_text,
-    //   heard_of: dq4_text,
-    //   display_problems: dq5_text,
-    //   how_well: dq6_text,
-    //   decision_criterion: dq7_text,
-    //   comp_code: completion_code
-    // });
 
     $(instructions_id).show();
     $(instructions_bg_id).show();
