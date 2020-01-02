@@ -5,7 +5,7 @@
  * @author WestLangley / http://github.com/WestLangley
  * @author erich666 / http://erichaines.com
  */
-/*global THREE, console */
+/*global THREE1, console */
 
 // This set of controls performs orbiting, dollying (zooming), and panning. It maintains
 // the "up" direction as +Y, unlike the TrackballControls. Touch on tablet and phones is
@@ -13,15 +13,15 @@
 //
 //    Orbit - left mouse / touch: one finger move
 //    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
-//    Pan - right mouse, or arrow keys / touch: three finter swipe
+//    Pan - right mouse, or arrow keys / touch: THREE1 finter swipe
 //
 // This is a drop-in replacement for (most) TrackballControls used in examples.
 // That is, include this js file and wherever you see:
-//    	controls = new THREE.TrackballControls( camera );
+//    	controls = new THREE1.TrackballControls( camera );
 //      controls.target.z = 150;
 // Simple substitute "OrbitControls" and the control should work as-is.
 
-THREE.OrbitControls = function(object, domElement) {
+THREE1.OrbitControls = function(object, domElement) {
   this.object = object;
   this.domElement = domElement !== undefined ? domElement : document;
   this.object.rotationAutoUpdate = false;
@@ -32,7 +32,7 @@ THREE.OrbitControls = function(object, domElement) {
   var viewtemp = this.object.userData.views;
   // "target" sets the location of focus, where the control orbits around
   // and where it pans with respect to.
-  this.target = new THREE.Vector3();
+  this.target = new THREE1.Vector3();
   // center is old, deprecated; use "target" instead
   this.center = this.target;
 
@@ -44,6 +44,10 @@ THREE.OrbitControls = function(object, domElement) {
   this.noRotate = true;
   this.rotateSpeed = 1.0;
 
+  this.keyPanSpeed = 25.0; // pixels moved per arrow key push
+  this.noKeys = false;
+  // The four arrow keys
+  this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
   // How far you can orbit vertically, upper and lower limits.
   // Range is 0 to Math.PI radians.
   this.minPolarAngle = 0; // radians
@@ -56,15 +60,15 @@ THREE.OrbitControls = function(object, domElement) {
 
   var EPS = 0.000001;
 
-  var rotateStart = new THREE.Vector2();
-  var rotateEnd = new THREE.Vector2();
-  var rotateDelta = new THREE.Vector2();
+  var rotateStart = new THREE1.Vector2();
+  var rotateEnd = new THREE1.Vector2();
+  var rotateDelta = new THREE1.Vector2();
 
   var phiDelta = 0;
   var thetaDelta = 0;
   var scale = 1;
   var distArr = [];
-  var lastPosition = new THREE.Vector3();
+  var lastPosition = new THREE1.Vector3();
 
   var STATE = {
     NONE: -1,
@@ -119,28 +123,29 @@ THREE.OrbitControls = function(object, domElement) {
     scale = 1;
     let normal;
     let orbviews = [];
-    for (let i = 0; i < 18; i++) {
-      var temp = new THREE.Vector3(0, 0, 0);
+    for (let i = 0; i < views.length; i++) {
+      var temp = new THREE1.Vector3(0, 0, 0);
       temp.x = viewtemp[i].x;
       temp.y = viewtemp[i].y;
       temp.z = viewtemp[i].z;
       orbviews[i] = temp;
     }
-    for (i = 0; i < 18; i++) {
+    for (i = 0; i < views.length; i++) {
       if (i != this.object.userData.selectedView) {
-        normal = position
-          .clone()
-          .sub(orbviews[this.object.userData.selectedView])
-          .normalize();
-        distArr[i] = normal
-          .multiplyScalar(
-            orbviews[i]
-              .sub(orbviews[this.object.userData.selectedView])
-              .dot(normal)
-          )
-          .add(orbviews[this.object.userData.selectedView])
-          .sub(orbviews[i])
-          .length();
+        // normal = position
+        //   .clone()
+        //   .sub(orbviews[this.object.userData.selectedView])
+        //   .normalize();
+        // distArr[i] = normal
+        //   .multiplyScalar(
+        //     orbviews[i]
+        //       .sub(orbviews[this.object.userData.selectedView])
+        //       .dot(normal)
+        //   )
+        //   .add(orbviews[this.object.userData.selectedView])
+        //   .sub(orbviews[i])
+        //   .length();
+        distArr[i] = position.clone().distanceTo(orbviews[i]);
       } else {
         distArr[i] = 0;
       }
@@ -148,7 +153,7 @@ THREE.OrbitControls = function(object, domElement) {
 
     let mindist = distArr[0];
     this.object.userData.selectedView = 0;
-    for (i = 1; i < 18; i++) {
+    for (i = 1; i < views.length; i++) {
       if (mindist == 0) {
         mindist = distArr[i];
         this.object.userData.selectedView = 1;
@@ -167,10 +172,11 @@ THREE.OrbitControls = function(object, domElement) {
     } else {
       this.object.userData.viewedCount[this.object.userData.selectedView]++;
     }
-    console.log(this.object.userData);
+    // console.log(this.object.userData);
     position.copy(this.target).add(newPos);
 
     this.object.lookAt(this.target);
+    // console.log(this.target, position);
     // this.object.position.x = newPos.x;
     // this.object.position.y = newPos.y;
     // this.object.position.z = newPos.z;
@@ -210,11 +216,52 @@ THREE.OrbitControls = function(object, domElement) {
       rotateStart.set(event.clientX, event.clientY);
     }
 
-    // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
+    // Greggman fix: https://github.com/greggman/THREE1.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
 
     scope.domElement.addEventListener("mouseup", onMouseUp, false);
   }
 
+  function onKeyDown(event) {
+    if (scope.enabled === false) {
+      return;
+    }
+    if (scope.noKeys === true) {
+      return;
+    }
+
+    // pan a pixel - I guess for precise positioning?
+    // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
+    var needUpdate = false;
+    var element =
+      scope.domElement === document ? scope.domElement.body : scope.domElement;
+
+    switch (event.keyCode) {
+      case scope.keys.UP:
+        rotateDelta = new THREE.Vector2(0, scope.keyPanSpeed);
+
+        needUpdate = true;
+        break;
+      case scope.keys.BOTTOM:
+        rotateDelta = new THREE.Vector2(0, -scope.keyPanSpeed);
+        needUpdate = true;
+        break;
+      case scope.keys.LEFT:
+        rotateDelta = new THREE.Vector2(scope.keyPanSpeed, 0);
+        needUpdate = true;
+        break;
+      case scope.keys.RIGHT:
+        rotateDelta = new THREE.Vector2(-scope.keyPanSpeed, 0);
+        needUpdate = true;
+        break;
+    }
+    thetaDelta = (2 * Math.PI * rotateDelta.x) / element.clientWidth;
+    phiDelta = (2 * Math.PI * rotateDelta.y) / element.clientHeight;
+
+    // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
+    if (needUpdate) {
+      scope.update();
+    }
+  }
   function onMouseUp(/* event */) {
     if (scope.enabled === false) return;
     var element =
@@ -223,21 +270,22 @@ THREE.OrbitControls = function(object, domElement) {
     if (state === STATE.ROTATE) {
       if (event.button === 0) {
         rotateEnd.set(event.clientX, event.clientY);
-        rotateDelta.subVectors(rotateEnd, rotateStart);
+        // rotateDelta.subVectors(rotateEnd, rotateStart);
+        rotateDelta.subVectors(rotateStart, rotateEnd);
 
         thetaDelta = (2 * Math.PI * rotateDelta.x) / element.clientWidth;
         phiDelta = (2 * Math.PI * rotateDelta.y) / element.clientHeight;
         // rotating across whole screen goes 360 degrees around
 
         rotateStart.copy(rotateEnd);
-        if (rotateDelta.length() > 30) {
+        if (rotateDelta.length() > 15) {
           scope.update();
         }
       }
     }
-    // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
+    // Greggman fix: https://github.com/greggman/THREE1.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
 
-    // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
+    // Greggman fix: https://github.com/greggman/THREE1.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
 
     scope.domElement.removeEventListener("mouseup", onMouseUp, false);
 
@@ -252,6 +300,9 @@ THREE.OrbitControls = function(object, domElement) {
     false
   );
   this.domElement.addEventListener("mousedown", onMouseDown, false);
+  this.domElement.addEventListener("keydown", onKeyDown, false);
 };
 
-THREE.OrbitControls.prototype = Object.create(THREE.EventDispatcher.prototype);
+THREE1.OrbitControls.prototype = Object.create(
+  THREE1.EventDispatcher.prototype
+);

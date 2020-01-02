@@ -1,67 +1,45 @@
 // Global variables
 
-var condition = -1;
-var which_quarter = -1;
-var motion_toward_me = -1;
-var match_side = -1;
-var overall_flip = -1;
-var response = -1;
-var RT = -1;
-var time_final_shown = -1;
-var movieName = -1;
-var gender_val = $("#gender_selector").val();
-var age_val = $("#age_selector").val();
+var response = -1,
+  RT = -1,
+  gender_val = $("#gender_selector").val(),
+  age_val = $("#age_selector").val();
 var total_time_elapsed = -1;
-var end_time = -1;
-var switchedWindows = -1;
-var dq2_text = "NULL";
-var dq3_text = "NULL";
-var dq4_text = "NULL";
-var dq5_text = "NULL";
-var dq6_text = "NULL";
-var completion_code = 000;
-var movieTimer = 0;
-
-var movie1_play_time;
-
-var movie2_play_time;
-
-var final_movie_play_time;
-
-var bad_subject = 0;
-var viewedExample1 = 0;
-var viewedExample2 = 0;
-var viewedExample1PreTest = 0;
-var viewedExample2PreTest = 0;
-var viewedFinal = 0;
-
+var switchedWindows = -1,
+  dq2_text = "NULL",
+  dq3_text = "NULL",
+  dq4_text = "NULL",
+  dq5_text = "NULL",
+  dq6_text = "NULL",
+  scompletion_code = 000;
 var cgibin_dir; // will get prepended to Python script names; leave as empty string if no such dir
-//  n.b., if it does exist, remember to end with trailing slash!
-//cgibin_dir = "/cgi-bin/";    //for localhost testing
 cgibin_dir = "api/"; //for Dreamhost server
 
-var instructions_id = "#instructions";
-var instructions_bg_id = "#instructions_bg";
-var next_button_id = "#nextbutton";
-var back_button_id = "#backbutton";
-var demographics_div_id = "#demographics_survey_div";
-var window_resized_error_id = "#winresized";
-var debriefing_questionairre_div_id = "#debriefing_questionairre_div";
-var mobile_browser_error_id = "#mobilebrowser";
-var BrowserCheck_div_id = "#BrowserCheck_div";
+var instructions_id = "#instructions",
+  instructions_bg_id = "#instructions_bg",
+  next_button_id = "#nextbutton",
+  back_button_id = "#backbutton",
+  demographics_div_id = "#demographics_survey_div",
+  window_resized_error_id = "#winresized",
+  debriefing_questionairre_div_id = "#debriefing_questionairre_div",
+  mobile_browser_error_id = "#mobilebrowser",
+  BrowserCheck_div_id = "#BrowserCheck_div";
 document.body.style.background = "hsl(0,0%,100%)";
-var win_width, win_height;
-var win_resize_trial_invalid = 0;
-var win_center_x, win_center_y;
-var cursor_showing = 1;
-var this_rt;
-var worker_id = "";
-var worker_id_valid;
-var worker_id_used_before = -1; //-2:error, -1:undefined, 0:unused, 1:used
-var user_agent_string = navigator.userAgent;
-var browser_check_div_id = "BrowserCheckDiv";
-var trial_start, trial_time;
-
+var win_width,
+  win_height,
+  win_resize_trial_invalid = 0,
+  win_center_x,
+  win_center_y,
+  cursor_showing = 1,
+  this_rt;
+var worker_id = "",
+  worker_id_valid,
+  worker_id_used_before = -1; //-2:error, -1:undefined, 0:unused, 1:used
+var user_agent_string = navigator.userAgent,
+  browser_check_div_id = "BrowserCheckDiv",
+  trial_start,
+  trial_time;
+var log80Arr = [];
 var testArr = [
   "sphere",
   "cube",
@@ -73,7 +51,7 @@ var testArr = [
 ];
 var resultVolumeJSON = {
   cube: { type: "cube", edge: 32, r: "", h: "" },
-  sphere: { type: "sphere", r: 20 },
+  sphere: { type: "sphere", r: 20, edge: "", h: "" },
   pyramid: { type: "pyramid", edge: 36, h: 40, r: "" },
   "rectangle prism standing": {
     type: "prism standing",
@@ -162,7 +140,7 @@ function dot_onready() {
   worker_id_valid = validate_worker_id(worker_id);
 
   if (worker_id_valid) {
-    determine_condition(worker_id);
+    // determine_condition(worker_id);
     check_worker_id_used_before(worker_id);
   }
 
@@ -341,7 +319,7 @@ function do_instructions5a_validate_input() {
   // valid worker ID entered?
   var user_input_worker_id = $("#mturk_worker_id_input").val();
   if (validate_worker_id(user_input_worker_id)) {
-    determine_condition(user_input_worker_id);
+    // determine_condition(user_input_worker_id);
     check_worker_id_used_before(user_input_worker_id);
     worker_id = user_input_worker_id;
     do_instructions5b();
@@ -530,10 +508,15 @@ var testCount = 0;
 
 function loop_task() {
   $("#testResult").html("");
-  trial_start = Date.now();
-  var progress = Math.round((testCount * 100) / 7);
+
+  var progress = Math.round((testCount * 100) / 4);
   $("#testProgress > div > div").css("width", progress + "%");
   $("#testProgress span").html(progress);
+  three_init_test();
+  object1_2.visible = false;
+  plane1_2.visible = false;
+  object0.visible = false;
+
   switch (testArr[testCount]) {
     case "cube":
       console.log("cube");
@@ -570,28 +553,61 @@ function loop_task() {
 
 function go_next_task() {
   trial_time = (Date.now() - trial_start) / 1000;
-  if (camera.userData.viewedAxis < 1) {
+  if (camera.userData.viewedAxis < 4) {
     alertMX("Subjects should see the volume from at least 4 different views");
-  } else if (trial_time < 1) {
+  } else if (trial_time < 20) {
     alertMX("Subjects should spent more than 20 seconds on this trial");
   } else {
     console.log(testArr[testCount]);
     testResults.push(resultVolumeJSON[testArr[testCount]]);
     testResults[testResults.length - 1].startPosition = p1;
-    testResults[testResults.length - 1].endPosition = objects[0].position;
+    testResults[testResults.length - 1].endPosition = new THREE.Vector3();
+    testResults[testResults.length - 1].endPosition.x =
+      objects[0].position.x.toFixed(3) * 1;
+    testResults[testResults.length - 1].endPosition.y =
+      objects[0].position.y.toFixed(3) * 1;
+    testResults[testResults.length - 1].endPosition.z =
+      objects[0].position.z.toFixed(3) * 1;
     testResults[testResults.length - 1].totalTime = trial_time;
     testResults[testResults.length - 1].viewedTime = camera.userData.viewedTime;
     testResults[testResults.length - 1].viewedOrder =
       camera.userData.viewedOrder;
     testCount++;
-    if (testCount == 2) {
+    if (testCount == 3) {
+      alertMX(
+        "You completed the trials. The next one is real experiment data. Pay attention"
+      );
+    }
+    if (testCount == 4) {
       // $("#instructions1").hide();
       // $("#example_container").hide();
       three_disable();
+      for (let i = 0; i < views.length; i++) {
+        log80Arr.push({ viewedTime: camera.userData.viewedTime[i] });
+        log80Arr[i].distance = views[selectedView]
+          .distanceTo(views[i])
+          .toFixed(3);
+      }
       let post_data = new PostData(cgibin_dir + "dot_log_volume.py");
       post_data.post(
-        JSON.stringify({ turkID: worker_id, data_content: testResults })
+        JSON.stringify({
+          turkID: worker_id,
+          data_content: testResults,
+          log80: log80Arr
+        })
       );
+      // $.notify(
+      //   {
+      //     title:
+      //       "You completed the trials. <br>The next one is real experiment data<br>Pay attention"
+      //   },
+      //   {
+      //     style: "foo",
+      //     autoHide: false,
+      //     clickToHide: false
+      //   }
+      // );
+
       // $(debriefing_questionairre_div_id).show();
       // console.log(testResults);a
       do_task2();
@@ -603,11 +619,17 @@ function go_next_task() {
 function do_task2() {
   $("#example_container").hide();
   $("body").append(
-    "<div id='part2_container' style='display:block; text-align:-webkit-center; padding-left:50px;'></div>"
+    "<div id='part2_wrapper'><div id='part2_container' style='display:block; text-align:-webkit-center; padding-left:50px;'></div></div>"
   );
   $("#instructions1").html(
     "<b>Part 2 - Which Looks More Aesthetically Pleasing?</b><br><br>" +
       "On each trial, please indicate whether the dot's position within the volume is more aesthetically pleasing in the left or the right display.  This part of the experiment is a bit longer than Part 1.  Please try to stay focused and respond carefully, since your data will be useful to us only if you remain engaged!</b>"
+  );
+  $("#part2_wrapper").append(
+    "<button class='leftPrefer' style='color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;'>I prefer this</button><button class='rightPrefer' style='color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;'>I prefer this</button>"
+  );
+  $("#part2_wrapper").append(
+    "<div id='testProgress2'><div><div></div></div><p id='part_name_block2'>Part 2: <span>0</span> % Complete</p></div>"
   );
   three_init_part2();
 }
@@ -845,23 +867,23 @@ function objToString(obj) {
   return str;
 }
 
-function determine_condition(id_str) {
-  $.post(
-    cgibin_dir + "determine_condition.py",
-    { workerid: id_str },
-    determine_condition_callback
-  );
-}
+// function determine_condition(id_str) {
+//   $.post(
+//     cgibin_dir + "determine_condition.py",
+//     { workerid: id_str },
+//     determine_condition_callback
+//   );
+// }
 
-function determine_condition_callback(check_status) {
-  condition = +check_status;
-  // alert(connectedness_condition)
+// function determine_condition_callback(check_status) {
+//   condition = +check_status;
+//   // alert(connectedness_condition)
 
-  if (condition == -1) {
-    alert("Abort: experiment sample reached!");
-  }
-  console.log(condition);
-}
+//   if (condition == -1) {
+//     alert("Abort: experiment sample reached!");
+//   }
+//   // console.log(condition);
+// }
 
 function alertMX(t) {
   $("body").append(
@@ -876,6 +898,10 @@ function alertMX(t) {
   $("#boxMX").click(function() {
     $(this).remove();
   });
+  setTimeout(() => {
+    $("#boxMX").remove();
+    // console.log("removewd");
+  }, 5000);
 }
 class PostData {
   constructor(url) {
@@ -901,3 +927,19 @@ class PostData {
     }
   }
 }
+$.notify.addStyle("foo", {
+  html:
+    "<div>" +
+    "<div class='clearfix'>" +
+    "<div class='title' data-notify-html='title'/>" +
+    "<div class='buttons'>" +
+    "</div>" +
+    "</div>" +
+    "</div>"
+});
+
+//listen for click events from this style
+$(document).on("click", ".notifyjs-foo-base .no", function() {
+  //programmatically trigger propogating hide event
+  $(this).trigger("notify-hide");
+});

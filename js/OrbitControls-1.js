@@ -5,7 +5,7 @@
  * @author WestLangley / http://github.com/WestLangley
  * @author erich666 / http://erichaines.com
  */
-/*global THREE1, console */
+/*global THREE, console */
 
 // This set of controls performs orbiting, dollying (zooming), and panning. It maintains
 // the "up" direction as +Y, unlike the TrackballControls. Touch on tablet and phones is
@@ -13,15 +13,15 @@
 //
 //    Orbit - left mouse / touch: one finger move
 //    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
-//    Pan - right mouse, or arrow keys / touch: THREE1 finter swipe
+//    Pan - right mouse, or arrow keys / touch: three finter swipe
 //
 // This is a drop-in replacement for (most) TrackballControls used in examples.
 // That is, include this js file and wherever you see:
-//    	controls = new THREE1.TrackballControls( camera );
+//    	controls = new THREE.TrackballControls( camera );
 //      controls.target.z = 150;
 // Simple substitute "OrbitControls" and the control should work as-is.
 
-THREE1.OrbitControls = function(object, domElement) {
+THREE.OrbitControls = function(object, domElement) {
   this.object = object;
   this.domElement = domElement !== undefined ? domElement : document;
   this.object.rotationAutoUpdate = false;
@@ -32,7 +32,7 @@ THREE1.OrbitControls = function(object, domElement) {
   var viewtemp = this.object.userData.views;
   // "target" sets the location of focus, where the control orbits around
   // and where it pans with respect to.
-  this.target = new THREE1.Vector3();
+  this.target = new THREE.Vector3();
   // center is old, deprecated; use "target" instead
   this.center = this.target;
 
@@ -56,15 +56,15 @@ THREE1.OrbitControls = function(object, domElement) {
 
   var EPS = 0.000001;
 
-  var rotateStart = new THREE1.Vector2();
-  var rotateEnd = new THREE1.Vector2();
-  var rotateDelta = new THREE1.Vector2();
+  var rotateStart = new THREE.Vector2();
+  var rotateEnd = new THREE.Vector2();
+  var rotateDelta = new THREE.Vector2();
 
   var phiDelta = 0;
   var thetaDelta = 0;
   var scale = 1;
   var distArr = [];
-  var lastPosition = new THREE1.Vector3();
+  var lastPosition = new THREE.Vector3();
 
   var STATE = {
     NONE: -1,
@@ -120,7 +120,7 @@ THREE1.OrbitControls = function(object, domElement) {
     let normal;
     let orbviews = [];
     for (let i = 0; i < 18; i++) {
-      var temp = new THREE1.Vector3(0, 0, 0);
+      var temp = new THREE.Vector3(0, 0, 0);
       temp.x = viewtemp[i].x;
       temp.y = viewtemp[i].y;
       temp.z = viewtemp[i].z;
@@ -210,7 +210,7 @@ THREE1.OrbitControls = function(object, domElement) {
       rotateStart.set(event.clientX, event.clientY);
     }
 
-    // Greggman fix: https://github.com/greggman/THREE1.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
+    // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
 
     scope.domElement.addEventListener("mouseup", onMouseUp, false);
   }
@@ -235,9 +235,9 @@ THREE1.OrbitControls = function(object, domElement) {
         }
       }
     }
-    // Greggman fix: https://github.com/greggman/THREE1.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
+    // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
 
-    // Greggman fix: https://github.com/greggman/THREE1.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
+    // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
 
     scope.domElement.removeEventListener("mouseup", onMouseUp, false);
 
@@ -254,6 +254,4 @@ THREE1.OrbitControls = function(object, domElement) {
   this.domElement.addEventListener("mousedown", onMouseDown, false);
 };
 
-THREE1.OrbitControls.prototype = Object.create(
-  THREE1.EventDispatcher.prototype
-);
+THREE.OrbitControls.prototype = Object.create(THREE.EventDispatcher.prototype);

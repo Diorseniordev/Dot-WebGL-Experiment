@@ -158,3 +158,51 @@ p {
   max-width: 500px;
   font-size: xx-large;
 }
+.leftPrefer {
+  position: relative;
+  left: 200px;
+  top: 50px;
+}
+.rightPrefer {
+  position: relative;
+  right: 200px;
+  float: right;
+  top: 50px;
+}
+#testProgress2 {
+  text-align: center;
+}
+div#testProgress2 > div {
+  width: 200px;
+  height: 20px;
+  border: 1px solid #ccc;
+  margin: auto;
+}
+div#testProgress2 > div > div {
+  width: 0%;
+  height: 20px;
+  background: #ccc;
+  float: left;
+}
+
+.notifyjs-foo-base {
+  opacity: 1;
+  border: 2px solid grey;
+  background: rgb(255, 255, 255);
+  padding: 5px;
+  border-radius: 10px;
+  height: 100px;
+}
+
+.notifyjs-foo-base .title {
+  float: left;
+  margin: 10px 0 0 10px;
+  /* text-align: right; */
+}
+
+.notifyjs-corner {
+  position: fixed;
+  top: 40% !important;
+  left: 35%;
+  width: 70%;
+}
