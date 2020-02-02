@@ -55,7 +55,7 @@
               point.z < 12.25 &&
               point.z > -12.25;
             break;
-          case "rectangle prism side":
+          case "rectangle prism":
             valid =
               point.x < 18.25 &&
               point.x > -18.25 &&
@@ -69,7 +69,7 @@
             let d0 = Math.sqrt(point.x * point.x + point.z * point.z);
             valid = valid && d0 < 14.25;
             break;
-          case "cylinder side":
+          case "cylinder":
             valid = point.x < 18.25 && point.x > -18.25;
             d0 = Math.sqrt(point.y * point.y + point.z * point.z);
             valid = valid && d0 < 14.25;

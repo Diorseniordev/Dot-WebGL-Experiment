@@ -1,4 +1,4 @@
-#!C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe
+#!C:\Users\s7eve\AppData\Local\Programs\Python\Python37\python.exe
 import os
 import sys
 import json
@@ -10,13 +10,13 @@ json_data = json.loads(request_body)
 
 # Headers
 TEST_HEADERS = ["type", "edge", "h",
-                "r", "totalTime", "startPosition", "endPosition", "viewedOrder", "viewedTime"]
+                "r", "totalTime", "startPosition", "endPosition", "viewOrder", "viewedTime"]
 LOG80_HEADERS = ["viewedTime", "distance"]
 
 # Check if parameters have been supplied
 if 'turkID' in json_data:
 
-    f = open('dot_volume_%s.txt' %
+    f = open('dot_volume_block1_%s.txt' %
              (json_data['turkID']), 'w')
     f.write(" \t".join(TEST_HEADERS) + "\n")
     for row in json_data['data_content'][3:]:

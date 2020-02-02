@@ -155,17 +155,17 @@ textarea {
 }
 p {
   margin: 1em auto;
-  max-width: 500px;
+  max-width: 750px;
   font-size: xx-large;
 }
 .leftPrefer {
   position: relative;
-  left: 200px;
+  left: 190px;
   top: 50px;
 }
 .rightPrefer {
   position: relative;
-  right: 200px;
+  right: 215px;
   float: right;
   top: 50px;
 }

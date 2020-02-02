@@ -237,13 +237,16 @@ THREE1.OrbitControls = function(object, domElement) {
 
     switch (event.keyCode) {
       case scope.keys.UP:
+        console.log(scope.object.position);
         rotateDelta = new THREE.Vector2(0, scope.keyPanSpeed);
-
-        needUpdate = true;
+        if(scope.object.position.y > -45) needUpdate = true;
+        else needUpdate = false;
         break;
       case scope.keys.BOTTOM:
+        console.log(scope.object.position);
         rotateDelta = new THREE.Vector2(0, -scope.keyPanSpeed);
-        needUpdate = true;
+        if (scope.object.position.y < 110) needUpdate = true;
+        else needUpdate = false;
         break;
       case scope.keys.LEFT:
         rotateDelta = new THREE.Vector2(scope.keyPanSpeed, 0);
@@ -299,7 +302,7 @@ THREE1.OrbitControls = function(object, domElement) {
     },
     false
   );
-  this.domElement.addEventListener("mousedown", onMouseDown, false);
+  // this.domElement.addEventListener("mousedown", onMouseDown, false);
   this.domElement.addEventListener("keydown", onKeyDown, false);
 };
 

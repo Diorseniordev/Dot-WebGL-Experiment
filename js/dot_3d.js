@@ -312,9 +312,9 @@ function three_init_test_sphere(onComplete) {
     //     : !valid0
     //     ? "The green dot is outside the shape."
     //     : "The yellow dot is outside the shape.";
-    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
-    $("#testResult").html(msg);
-
+    // var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
+    // $("#testResult").html(msg);
+      if(!valid0) alertMX("Dot is outside the shape");
     // if (valid0 && valid1 && onComplete != null) {
     if (valid0 && onComplete != null) {
       onComplete();
@@ -377,9 +377,9 @@ function three_init_test_cube(onComplete) {
     //     : !valid0
     //     ? "The green dot is outside the shape."
     //     : "The yellow dot is outside the shape.";
-    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
-    $("#testResult").html(msg);
-
+    // var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
+    // $("#testResult").html(msg);
+    if(!valid0) alertMX("Dot is outside the shape");
     if (valid0 && onComplete != null) {
       // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
@@ -452,9 +452,9 @@ function three_init_test_pyramid(onComplete) {
     //     : !valid0
     //     ? "The green dot is outside the shape."
     //     : "The yellow dot is outside the shape.";
-    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
-    $("#testResult").html(msg);
-
+    // var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
+    // $("#testResult").html(msg);
+    if(!valid0) alertMX("Dot is outside the shape");
     if (valid0 && onComplete != null) {
       // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
@@ -517,9 +517,9 @@ function three_init_test_rectprism1(onComplete) {
     //     : !valid0
     //     ? "The green dot is outside the shape."
     //     : "The yellow dot is outside the shape.";
-    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
-    $("#testResult").html(msg);
-
+    // var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
+    // $("#testResult").html(msg);
+    if(!valid0) alertMX("Dot is outside the shape");
     if (valid0 && onComplete != null) {
       // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
@@ -582,9 +582,9 @@ function three_init_test_rectprism2(onComplete) {
     //     : !valid0
     //     ? "The green dot is outside the shape."
     //     : "The yellow dot is outside the shape.";
-    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
-    $("#testResult").html(msg);
-
+    // var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
+    // $("#testResult").html(msg);
+    if(!valid0) alertMX("Dot is outside the shape");
     if (valid0 && onComplete != null) {
       // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
@@ -647,9 +647,9 @@ function three_init_test_cylinder1(onComplete) {
     //     : !valid0
     //     ? "The green dot is outside the shape."
     //     : "The yellow dot is outside the shape.";
-    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
-    $("#testResult").html(msg);
-
+    // var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
+    // $("#testResult").html(msg);
+    if(!valid0) alertMX("Dot is outside the shape");
     if (valid0 && onComplete != null) {
       // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;
@@ -714,9 +714,9 @@ function three_init_test_cylinder2(onComplete) {
     //     : !valid0
     //     ? "The green dot is outside the shape."
     //     : "The yellow dot is outside the shape.";
-    var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
-    $("#testResult").html(msg);
-
+    // var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
+    // $("#testResult").html(msg);
+    if(!valid0) alertMX("Dot is outside the shape");
     if (valid0 && onComplete != null) {
       // testResults[testResults.length - 1].endPosition1 = objects[0].position;
       // testResults[testResults.length - 1].endPosition2 = objects[1].position;

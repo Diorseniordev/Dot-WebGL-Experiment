@@ -1,4 +1,4 @@
-#!C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe
+#!C:\Users\s7eve\AppData\Local\Programs\Python\Python37\python.exe
 
 import os.path
 import cgitb

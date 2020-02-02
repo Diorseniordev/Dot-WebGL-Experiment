@@ -112,18 +112,14 @@ function addVolumeToScene(name) {
       part2Volume1 = part2VolumeArr1[1];
       part2Volume2 = part2VolumeArr2[1];
       break;
-    case "pyramid":
-      console.log("pyramid");
-      part2Volume1 = part2VolumeArr1[2];
-      part2Volume2 = part2VolumeArr2[2];
-      break;
+    
     case "rectangle prism standing":
       console.log("rectangle prism standing");
       part2Volume1 = part2VolumeArr1[3];
       part2Volume2 = part2VolumeArr2[3];
       break;
-    case "rectangle prism side":
-      console.log("rectangle prism side");
+    case "rectangle prism":
+      console.log("rectangle prism");
       part2Volume1 = part2VolumeArr1[4];
       part2Volume2 = part2VolumeArr2[4];
       break;
@@ -132,8 +128,8 @@ function addVolumeToScene(name) {
       part2Volume1 = part2VolumeArr1[5];
       part2Volume2 = part2VolumeArr2[5];
       break;
-    case "cylinder side":
-      console.log("cylinder side");
+    case "cylinder":
+      console.log("cylinder");
       part2Volume1 = part2VolumeArr1[6];
       part2Volume2 = part2VolumeArr2[6];
       break;
@@ -289,13 +285,27 @@ function three_init_part2(onComplete) {
 
   // object22.position.set(0, 0, 0);
   $(".leftPrefer").click(function() {
-    if ((Date.now() - block2start) / 1000 < 1)
-      alertMX("You need to see at least one second!");
+    if ((Date.now() - block2start) < 10)
+      console.log("ignored");
+    else if ((Date.now() - block2start) < 100)
+      { 
+        if(alertCount == 0) {
+          alertMX("You responded too fast");
+          alertCount = 1;
+        }
+      }
     else saveExpData(1);
   });
   $(".rightPrefer").click(function() {
-    if ((Date.now() - block2start) / 1000 < 1)
-      alertMX("You need to see at least one second!");
+    if ((Date.now() - block2start) < 10)
+      console.log("ignored")
+    else if ((Date.now() - block2start) < 100)
+    { 
+      if(alertCount == 0) {
+        alertMX("You responded too fast");
+        alertCount = 1;
+      }
+    }
     else saveExpData(2);
   });
 
@@ -360,7 +370,7 @@ function placeDot() {
     renderer2.render(scene2, camera2);
   }, 500);
 }
-function findViewIndex(view) {
+function findViewIndex(view) {  
   for (let index = 0; index < views.length; index++) {
     if (view.distanceTo(views[index]) < 0.5) return index;
   }
@@ -462,14 +472,14 @@ function getRandomPoint(point, type) {
   newPoint = new THREE.Vector3();
   do {
     if (randview.z > 0.01 || randview.z < -0.01) {
-      newPoint.x = point.x + Math.random() * 40 - 20;
-      newPoint.y = point.y + Math.random() * 40 - 20;
+      newPoint.x = point.x + Math.random() * 3 - 3
+      newPoint.y = point.y + Math.random() * 3 - 3;
       newPoint.z =
         (constant - randview.x * newPoint.x - randview.y * newPoint.y) /
         randview.z;
     } else {
-      newPoint.y = point.y + Math.random() * 40 - 20;
-      newPoint.z = point.z + Math.random() * 40 - 20;
+      newPoint.y = point.y + Math.random() * 3 - 3;
+      newPoint.z = point.z + Math.random() * 3 - 3;
       newPoint.x =
         (constant - randview.y * newPoint.y - randview.z * newPoint.z) /
         randview.x;
@@ -477,7 +487,7 @@ function getRandomPoint(point, type) {
 
     countval++;
 
-    if (countval == 1000) {
+    if (countval == 5000) {
       console.log(
         constant,
         point,
@@ -488,7 +498,7 @@ function getRandomPoint(point, type) {
       countval = 0;
       break;
     }
-  } while (!(newPoint.distanceTo(point) < 25 && validatePoint(newPoint, type)));
+  } while (!(newPoint.distanceTo(point) > 2 && newPoint.distanceTo(point) < 3 && validatePoint(newPoint, type)));
   // while (!validatePoint(newPoint, type));
   newPoint.x = newPoint.x.toFixed(3) * 1;
   newPoint.y = newPoint.y.toFixed(3) * 1;
@@ -496,6 +506,7 @@ function getRandomPoint(point, type) {
   return newPoint;
 }
 var countval = 0;
+
 function validatePoint(point, type) {
   var valid = false;
   let d0;
@@ -512,16 +523,7 @@ function validatePoint(point, type) {
     case "sphere":
       valid = point.distanceTo(new THREE.Vector3(0, 0, 0)) < 18;
       break;
-    case "pyramid":
-      var valid = point.y < 18 && point.y > -18;
-      let validR = (((20 - point.y) * 25) / 40 - 2) * Math.SQRT1_2;
-      valid =
-        valid &&
-        point.x < validR &&
-        point.x > -validR &&
-        point.z < validR &&
-        point.z > -validR;
-      break;
+ 
     case "rectangle prism standing":
       valid =
         point.x < 12 &&
@@ -531,7 +533,7 @@ function validatePoint(point, type) {
         point.z < 12 &&
         point.z > -12;
       break;
-    case "rectangle prism side":
+    case "rectangle prism":
       valid =
         point.x < 18 &&
         point.x > -18 &&
@@ -545,7 +547,7 @@ function validatePoint(point, type) {
       d0 = Math.sqrt(point.x * point.x + point.z * point.z);
       valid = valid && d0 < 14;
       break;
-    case "cylinder side":
+    case "cylinder":
       valid = point.x < 18 && point.x > -18;
       d0 = Math.sqrt(point.y * point.y + point.z * point.z);
       valid = valid && d0 < 14;
@@ -556,3 +558,107 @@ function validatePoint(point, type) {
 
   return valid;
 }
+// function getRandomPoint(point, type) {
+//   var randviewtemp = new THREE.Vector3();
+//   if (dataCount < 12) randviewtemp = part2Views[dataCount % 4];
+//   else randviewtemp = part2Views[saveCount];
+//   var randview = new THREE.Vector3();
+//   randview.x = randviewtemp.x;
+//   randview.y = randviewtemp.y;
+//   randview.z = randviewtemp.z;
+//   randview = randview.normalize();
+//   randview.x = randview.x.toFixed(3) * 1;
+//   randview.y = randview.y.toFixed(3) * 1;
+//   randview.z = randview.z.toFixed(3) * 1;
+//   var constant =
+//     randview.x * point.x + randview.y * point.y + randview.z * point.z;
+
+//   newPoint = new THREE.Vector3();
+//   do {
+//     if (randview.z > 0.01 || randview.z < -0.01) {
+//       newPoint.x = point.x + Math.random() * 40 - 22
+//       newPoint.y = point.y + Math.random() * 40 - 22;
+//       newPoint.z =
+//         (constant - randview.x * newPoint.x - randview.y * newPoint.y) /
+//         randview.z;
+//     } else {
+//       newPoint.y = point.y + Math.random() * 40 - 22;
+//       newPoint.z = point.z + Math.random() * 40 - 22;
+//       newPoint.x =
+//         (constant - randview.y * newPoint.y - randview.z * newPoint.z) /
+//         randview.x;
+//     }
+
+//     countval++;
+
+//     if (countval == 5000) {
+//       console.log(
+//         constant,
+//         point,
+//         newPoint,
+//         randview,
+//         newPoint.distanceTo(point)
+//       );
+//       countval = 0;
+//       break;
+//     }
+//   } while (!(newPoint.distanceTo(point) > 20 && newPoint.distanceTo(point) < 25 && validatePoint(newPoint, type)));
+//   // while (!validatePoint(newPoint, type));
+//   newPoint.x = newPoint.x.toFixed(3) * 1;
+//   newPoint.y = newPoint.y.toFixed(3) * 1;
+//   newPoint.z = newPoint.z.toFixed(3) * 1;
+//   return newPoint;
+// }
+// var countval = 0;
+
+// function validatePoint(point, type) {
+//   var valid = false;
+//   let d0;
+//   switch (type) {
+//     case "cube":
+//       valid =
+//         point.x < 14 &&
+//         point.x > -14 &&
+//         point.y < 14 &&
+//         point.y > -14 &&
+//         point.z < 14 &&
+//         point.z > -14;
+//       break;
+//     case "sphere":
+//       valid = point.distanceTo(new THREE.Vector3(0, 0, 0)) < 18;
+//       break;
+ 
+//     case "rectangle prism standing":
+//       valid =
+//         point.x < 12 &&
+//         point.x > -12 &&
+//         point.y < 18 &&
+//         point.y > -18 &&
+//         point.z < 12 &&
+//         point.z > -12;
+//       break;
+//     case "rectangle prism side":
+//       valid =
+//         point.x < 18 &&
+//         point.x > -18 &&
+//         point.y < 12 &&
+//         point.y > -12 &&
+//         point.z < 12 &&
+//         point.z > -12;
+//       break;
+//     case "cylinder standing":
+//       valid = point.y < 18 && point.y > -18;
+//       d0 = Math.sqrt(point.x * point.x + point.z * point.z);
+//       valid = valid && d0 < 14;
+//       break;
+//     case "cylinder side":
+//       valid = point.x < 18 && point.x > -18;
+//       d0 = Math.sqrt(point.y * point.y + point.z * point.z);
+//       valid = valid && d0 < 14;
+//       break;
+//     default:
+//       break;
+//   }
+
+//   return valid;
+// }

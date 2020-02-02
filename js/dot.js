@@ -43,11 +43,11 @@ var log80Arr = [];
 var testArr = [
   "sphere",
   "cube",
-  "pyramid",
+  
   "rectangle prism standing",
-  "rectangle prism side",
+  "rectangle prism",
   "cylinder standing",
-  "cylinder side"
+  "cylinder"
 ];
 var resultVolumeJSON = {
   cube: { type: "cube", edge: 32, r: "", h: "" },
@@ -59,11 +59,12 @@ var resultVolumeJSON = {
     r: "",
     h: 40
   },
-  "rectangle prism side": { type: "prism side", edge: 28, r: "", h: 40 },
+  "rectangle prism": { type: "prism", edge: 28, r: "", h: 40 },
   "cylinder standing": { type: "cylinder standing", edge: "", r: 16, h: 40 },
-  "cylinder side": { type: "cylinder side", edge: "", r: 16, h: 40 }
+  "cylinder": { type: "cylinder", edge: "", r: 16, h: 40 }
 };
 var start_stamp = Date.now();
+var alertCount = 0;
 
 $(window).load(dot_onready);
 
@@ -490,8 +491,8 @@ function do_task() {
   $(instructions_bg_id).hide();
 
   $("#instructions1").html(
-    "<b>Part 1 - Place Dots within Volumes</b><br><br>" +
-      "On each trial, first click and drag the display to change your view of the pink volume.  Change the view at least four times, to make sure that you see the shape from several different angles and understand its overall structure.  Next, drag the small dot to a location within the volume that looks the most aesthetically pleasing from all views.        Since this part of the experiment contains a very small number of trials, it is critical that you take your time to respond carefully to each.  If more than one location is tied for most aesthetically pleasing, then please just pick one.  After you have finished adjusting the dot's location to look the most aesthetically pleasing from all views, press 'Submit'.</b>"
+    "<h6 style='text-align: center; margin: 30px 0px 20px 0px;'><b>Part 1 - Place Dots within Volumes</b></h6>" +
+      " On each trial, first click and drag the display to change your view of the pink volume.  Change the view at least four times, to make sure that you see the shape from several different angles and understand its overall structure.  Next, drag the small dot to a location within the volume that looks the most aesthetically pleasing from all views.        Since this part of the experiment contains a very small number of trials, it is critical that you take your time to respond carefully to each.  If more than one location is tied for most aesthetically pleasing, then please just pick one.  After you have finished adjusting the dot's location to look the most aesthetically pleasing from all views, press 'Submit'.</b>"
   );
   $("#instructions1").show();
 
@@ -534,16 +535,16 @@ function loop_task() {
       console.log("rectangle prism standing");
       three_play_test_rectprism1(go_next_task);
       break;
-    case "rectangle prism side":
-      console.log("rectangle prism side");
+    case "rectangle prism":
+      console.log("rectangle prism");
       three_play_test_rectprism2(go_next_task);
       break;
     case "cylinder standing":
       console.log("cylinder standing");
       three_play_test_cylinder1(go_next_task);
       break;
-    case "cylinder side":
-      console.log("cylinder side");
+    case "cylinder":
+      console.log("cylinder");
       three_play_test_cylinder2(go_next_task);
       break;
     default:
@@ -553,10 +554,17 @@ function loop_task() {
 
 function go_next_task() {
   trial_time = (Date.now() - trial_start) / 1000;
-  if (camera.userData.viewedAxis < 4) {
-    alertMX("Subjects should see the volume from at least 4 different views");
-  } else if (trial_time < 20) {
-    alertMX("Subjects should spent more than 20 seconds on this trial");
+  if (camera.userData.viewedAxis < 1) {
+    alertMX("Please carefully drag the dot to the location that looks the best from every viewpoint.  Use the WSAD or the arrow keys to change the view as many times as needed. ");
+  } else if (trial_time < 1) {
+    if (trial_time * 1000 < 10) console.log("ignored");
+    else if (trial_time < 1) { 
+      if(alertCount == 0) {
+        alertMX("You responded too fast");
+        alertCount = 1;
+      }
+      
+    }
   } else {
     console.log(testArr[testCount]);
     testResults.push(resultVolumeJSON[testArr[testCount]]);
@@ -570,7 +578,7 @@ function go_next_task() {
       objects[0].position.z.toFixed(3) * 1;
     testResults[testResults.length - 1].totalTime = trial_time;
     testResults[testResults.length - 1].viewedTime = camera.userData.viewedTime;
-    testResults[testResults.length - 1].viewedOrder =
+    testResults[testResults.length - 1].viewOrder =
       camera.userData.viewedOrder;
     testCount++;
     if (testCount == 3) {
@@ -617,19 +625,20 @@ function go_next_task() {
   }
 }
 function do_task2() {
+  alertCount = 0;
   $("#example_container").hide();
   $("body").append(
     "<div id='part2_wrapper'><div id='part2_container' style='display:block; text-align:-webkit-center; padding-left:50px;'></div></div>"
   );
   $("#instructions1").html(
-    "<b>Part 2 - Which Looks More Aesthetically Pleasing?</b><br><br>" +
+    "<h6 style='text-align: center; margin: 30px 0px 20px 0px;'><b>Part 2 - Which Looks More Aesthetically Pleasing?</b></h6>" +
       "On each trial, please indicate whether the dot's position within the volume is more aesthetically pleasing in the left or the right display.  This part of the experiment is a bit longer than Part 1.  Please try to stay focused and respond carefully, since your data will be useful to us only if you remain engaged!</b>"
   );
   $("#part2_wrapper").append(
     "<button class='leftPrefer' style='color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;'>I prefer this</button><button class='rightPrefer' style='color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;'>I prefer this</button>"
   );
   $("#part2_wrapper").append(
-    "<div id='testProgress2'><div><div></div></div><p id='part_name_block2'>Part 2: <span>0</span> % Complete</p></div>"
+    "<div id='testProgress2'><div><div></div></div><p id='part_name_block2'>Part 2: <span>0</span>% Complete</p></div>"
   );
   three_init_part2();
 }
