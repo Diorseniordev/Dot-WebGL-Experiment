@@ -11,7 +11,7 @@ json_data = json.loads(request_body)
 # Headers
 TEST_HEADERS = ["type", "edge", "h",
                 "r", "totalTime", "startPosition", "endPosition", "viewOrder", "viewedTime"]
-LOG80_HEADERS = ["viewedTime", "distance"]
+LOG80_HEADERS = ["viewedTime", "distance", "view"]
 
 # Check if parameters have been supplied
 if 'turkID' in json_data:
@@ -20,14 +20,14 @@ if 'turkID' in json_data:
              (json_data['turkID']), 'w')
     f.write(" \t".join(TEST_HEADERS) + "\n")
     for row in json_data['data_content'][3:]:
-        f.write("\t".join([str(row[str(c).rstrip()])
+        f.write("\t".join([str(row[str(c)])
                            for c in TEST_HEADERS]) + "\n")
     f.close()
     f = open('dot_volume_80_%s.txt' %
              (json_data['turkID']), 'w')
     f.write(" \t".join(LOG80_HEADERS) + "\n")
     for row in json_data['log80']:
-        f.write("\t".join([str(row[str(c).rstrip()])
+        f.write("\t".join([str(row[str(c)])
                            for c in LOG80_HEADERS]) + "\n")
     f.close()
 

@@ -47,7 +47,7 @@ THREE1.OrbitControls = function(object, domElement) {
   this.keyPanSpeed = 25.0; // pixels moved per arrow key push
   this.noKeys = false;
   // The four arrow keys
-  this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
+  this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40, W: 87, A: 65, S: 83, D:68, w: 119, a: 97, s: 115, d: 100 };
   // How far you can orbit vertically, upper and lower limits.
   // Range is 0 to Math.PI radians.
   this.minPolarAngle = 0; // radians
@@ -237,22 +237,30 @@ THREE1.OrbitControls = function(object, domElement) {
 
     switch (event.keyCode) {
       case scope.keys.UP:
-        console.log(scope.object.position);
+      case scope.keys.W:
+      case scope.keys.w:
+        // console.log(scope.object.position);
         rotateDelta = new THREE.Vector2(0, scope.keyPanSpeed);
         if(scope.object.position.y > -45) needUpdate = true;
         else needUpdate = false;
         break;
       case scope.keys.BOTTOM:
-        console.log(scope.object.position);
+      case scope.keys.S:
+      case scope.keys.s:
+        // console.log(scope.object.position);
         rotateDelta = new THREE.Vector2(0, -scope.keyPanSpeed);
         if (scope.object.position.y < 110) needUpdate = true;
         else needUpdate = false;
         break;
       case scope.keys.LEFT:
+      case scope.keys.A:
+      case scope.keys.a:
         rotateDelta = new THREE.Vector2(scope.keyPanSpeed, 0);
         needUpdate = true;
         break;
       case scope.keys.RIGHT:
+      case scope.keys.D:
+      case scope.keys.d:
         rotateDelta = new THREE.Vector2(-scope.keyPanSpeed, 0);
         needUpdate = true;
         break;

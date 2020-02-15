@@ -65,7 +65,7 @@ var resultVolumeJSON = {
 };
 var start_stamp = Date.now();
 var alertCount = 0;
-
+var saveFlag = true, part1trialTime = 0;
 $(window).load(dot_onready);
 
 function gradePQs() {
@@ -508,11 +508,18 @@ function do_task() {
 var testCount = 0;
 
 function loop_task() {
+  trial_start = Date.now();
   $("#testResult").html("");
-
-  var progress = Math.round((testCount * 100) / 4);
-  $("#testProgress > div > div").css("width", progress + "%");
-  $("#testProgress span").html(progress);
+  if(testCount < 3) {
+    var progress = Math.round((testCount * 100) / 3);
+    $("#testProgress > div > div").css("width", progress + "%");
+    $("#testProgress span:eq(1)").html(progress);
+    $("#testProgress span:eq(0)").html("Part 1: Practice ");
+  } else {
+    $("#testProgress > div").hide();
+    $("#part_name").html("This trial is real!");
+  }
+  
   three_init_test();
   object1_2.visible = false;
   plane1_2.visible = false;
@@ -553,17 +560,19 @@ function loop_task() {
 }
 
 function go_next_task() {
+  
   trial_time = (Date.now() - trial_start) / 1000;
-  if (camera.userData.viewedAxis < 1) {
+  if (camera.userData.viewedAxis < 4) {
     alertMX("Please carefully drag the dot to the location that looks the best from every viewpoint.  Use the WSAD or the arrow keys to change the view as many times as needed. ");
   } else if (trial_time < 1) {
-    if (trial_time * 1000 < 10) console.log("ignored");
+    if (trial_time * 1000 < 100) console.log("ignored");
     else if (trial_time < 1) { 
       if(alertCount == 0) {
         alertMX("You responded too fast");
         alertCount = 1;
+        
       }
-      
+      trial_start = Date.now();
     }
   } else {
     console.log(testArr[testCount]);
@@ -590,20 +599,23 @@ function go_next_task() {
       // $("#instructions1").hide();
       // $("#example_container").hide();
       three_disable();
-      for (let i = 0; i < views.length; i++) {
-        log80Arr.push({ viewedTime: camera.userData.viewedTime[i] });
-        log80Arr[i].distance = views[selectedView]
-          .distanceTo(views[i])
-          .toFixed(3);
+      if (trial_time < 5 || !saveFlag) {
+        saveFlag = false;
+        setTimeout(() => {
+          alertMX("Your response times indicate that you are not taking the task seriously. Unfortunately, your data are unusable, so it would be helpful if you returned the HIT for somebody else to try. If you think that you have received this message in error, then please complete the experiment and submit the HIT with an explanation of what happened. (Note that we still won't be able to use any of your data.)");  
+        }, 1000);
+        
+      } else {
+        for (let i = 0; i < views.length; i++) {
+          log80Arr.push({ viewedTime: camera.userData.viewedTime[i] });
+          log80Arr[i].distance = views[selectedView]
+            .distanceTo(views[i])
+            .toFixed(3);
+          log80Arr[i].view = views[i];
+        }
+        
       }
-      let post_data = new PostData(cgibin_dir + "dot_log_volume.py");
-      post_data.post(
-        JSON.stringify({
-          turkID: worker_id,
-          data_content: testResults,
-          log80: log80Arr
-        })
-      );
+   
       // $.notify(
       //   {
       //     title:
@@ -638,7 +650,7 @@ function do_task2() {
     "<button class='leftPrefer' style='color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;'>I prefer this</button><button class='rightPrefer' style='color:black; background:lightgray; font-size: 100%;margin: 0 auto; margin-top:1em;'>I prefer this</button>"
   );
   $("#part2_wrapper").append(
-    "<div id='testProgress2'><div><div></div></div><p id='part_name_block2'>Part 2: <span>0</span>% Complete</p></div>"
+    "<div id='testProgress2'><div><div></div></div><p id='part_name_block2'><span>Part 2: Practice </span><span>0</span>% Complete</p></div>"
   );
   three_init_part2();
 }
@@ -688,31 +700,34 @@ function gradeDebriefingQuestions() {
     $(debriefing_questionairre_div_id).hide();
     show_cursor();
     total_time_elapsed = Date.now() - start_stamp;
-    let post_data = new PostData(cgibin_dir + "dot_log_trial.py");
-    let complete_datas = [];
-    let complete_data = {};
-    complete_data.worker_id = worker_id;
-    complete_data.gender = gender_val;
-    complete_data.age = age_val;
-    complete_data.win_resized = win_resize_trial_invalid;
-    complete_data.total_time = total_time_elapsed;
-    complete_data.condition = 1;
-    complete_data.admitted_switching_windows = switchedWindows;
-    complete_data.summarize_instructions = dq2_text;
-    complete_data.clear_enough = dq3_text;
-    complete_data.heard_of = dq4_text;
-    complete_data.display_problems = dq5_text;
-    complete_data.how_well = dq6_text;
-    complete_data.decision_criterion = dq7_text;
-    complete_data.comp_code = completion_code;
-    complete_datas.push(complete_data);
-    // console.log(complete_data);
-    post_data.post(
-      JSON.stringify({
-        turkID: worker_id,
-        data_content: complete_datas
-      })
-    );
+    if (saveFlag) {
+      let post_data = new PostData(cgibin_dir + "dot_log_trial.py");
+      let complete_datas = [];
+      let complete_data = {};
+      complete_data.worker_id = worker_id;
+      complete_data.gender = gender_val;
+      complete_data.age = age_val;
+      complete_data.win_resized = win_resize_trial_invalid;
+      complete_data.total_time = total_time_elapsed;
+      complete_data.condition = 1;
+      complete_data.admitted_switching_windows = switchedWindows;
+      complete_data.summarize_instructions = dq2_text;
+      complete_data.clear_enough = dq3_text;
+      complete_data.heard_of = dq4_text;
+      complete_data.display_problems = dq5_text;
+      complete_data.how_well = dq6_text;
+      complete_data.decision_criterion = dq7_text;
+      complete_data.comp_code = completion_code;
+      complete_datas.push(complete_data);
+      // console.log(complete_data);
+      post_data.post(
+        JSON.stringify({
+          turkID: worker_id,
+          data_content: complete_datas
+        })
+      );
+    }
+    
 
     $(instructions_id).show();
     $(instructions_bg_id).show();

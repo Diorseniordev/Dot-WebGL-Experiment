@@ -24,7 +24,10 @@ div#winresized {
   font-family: sans-serif;
   position: fixed;
 }
-
+#part2_wrapper {
+  width: 1150px;
+  margin: 0px auto;
+}
 div#instructions {
   width: 400px;
   padding: 20px;
@@ -153,9 +156,9 @@ textarea {
   float: right;
   margin-left: 0.25em;
 }
-p {
+p#instructions1 {
   margin: 1em auto;
-  max-width: 750px;
+  min-width: 1150px;
   font-size: xx-large;
 }
 .leftPrefer {

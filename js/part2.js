@@ -20,7 +20,8 @@ var part2Volume,
   sceneOrder = [1, 2],
   saveDataArr = [],
   dataCount = 0,
-  block2start = 0;
+  block2start = 0, 
+  unusuableCount = 0 ;
 
 function fillVolumeArr1() {
   part2VolumeArr1[0] = new THREE.Mesh(
@@ -140,6 +141,7 @@ function addVolumeToScene(name) {
 
 function three_init_part2(onComplete) {
   // container = document.createElement("div");
+  
   container = $("#part2_container");
   container.width("90%");
   container.height("400px");
@@ -152,8 +154,16 @@ function three_init_part2(onComplete) {
   camera2 = new THREE.PerspectiveCamera(45, 1, 1, 1000);
   scene1.add(camera1);
   scene2.add(camera2);
-  part2Views = shuffle(views);
-
+  
+  part2Views = [];
+  for (let i = 0; i < views.length; i++) {
+    var temp = new THREE.Vector3(0, 0, 0);
+    temp.x = views[i].x;
+    temp.y = views[i].y;
+    temp.z = views[i].z;
+    part2Views[i] = temp;
+  }
+  part2Views = shuffle(part2Views);
   let pos = part2Views[0];
   part2Volume = testArr[--testCount];
 
@@ -282,29 +292,27 @@ function three_init_part2(onComplete) {
   // addVolumeToScene(part2Volume);
 
   placeDot();
-
+  alertCount = 0;
   // object22.position.set(0, 0, 0);
   $(".leftPrefer").click(function() {
-    if ((Date.now() - block2start) < 10)
-      console.log("ignored");
-    else if ((Date.now() - block2start) < 100)
-      { 
-        if(alertCount == 0) {
-          alertMX("You responded too fast");
-          alertCount = 1;
-        }
-      }
-    else saveExpData(1);
-  });
-  $(".rightPrefer").click(function() {
-    if ((Date.now() - block2start) < 10)
-      console.log("ignored")
-    else if ((Date.now() - block2start) < 100)
-    { 
+    if ((Date.now() - block2start) < 100) {
+      unusuableCount++;
       if(alertCount == 0) {
         alertMX("You responded too fast");
         alertCount = 1;
       }
+      block2start = Date.now();
+    }
+    else saveExpData(1);
+  });
+  $(".rightPrefer").click(function() {
+    if ((Date.now() - block2start) < 100) {
+      unusuableCount++;
+      if(alertCount == 0) {
+        alertMX("You responded too fast");
+        alertCount = 1;
+      }
+      block2start = Date.now();
     }
     else saveExpData(2);
   });
@@ -318,7 +326,7 @@ function placeDot() {
   if (dataCount < 12) {
     addVolumeToScene(testArr[Math.floor(dataCount / 4)]);
     sceneOrder = shuffle(sceneOrder);
-    block2start = Date.now();
+    block2start = Date.now() + 500;
     let pos = testResults[Math.floor(dataCount / 4)].endPosition;
 
     if (sceneOrder[0] == 1) {
@@ -336,7 +344,7 @@ function placeDot() {
     if (dataCount == 12)
       alertMX("You are all set to start choose the real data now!");
     addVolumeToScene(part2Volume);
-    block2start = Date.now();
+    block2start = Date.now() + 500;
     sceneOrder = shuffle(sceneOrder);
     let pos = testResults[testResults.length - 1].endPosition;
     if (sceneOrder[0] == 1) {
@@ -368,6 +376,7 @@ function placeDot() {
     part2Volume2.visible = true;
     renderer1.render(scene1, camera1);
     renderer2.render(scene2, camera2);
+    block2start = Date.now();
   }, 500);
 }
 function findViewIndex(view) {  
@@ -380,6 +389,12 @@ var saveCount = 0;
 function saveExpData(origin) {
   if (dataCount < part2Views.length + 12) {
     if (dataCount >= 12) {
+      if(dataCount == 46) {
+        if (unusuableCount * 10 >= 46) {
+          saveFlag = false;
+          alertMX("Your response times indicate that you are not taking the task seriously. Unfortunately, your data are unusable, so it would be helpful if you returned the HIT for somebody else to try. If you think that you have received this message in error, then please complete the experiment and submit the HIT with an explanation of what happened. (Note that we still won't be able to use any of your data.)");
+        }
+      }
       saveDataArr.push({ selected: origin });
       saveDataArr[saveCount].type = part2Volume;
       saveDataArr[saveCount].view = part2Views[saveCount];
@@ -389,6 +404,7 @@ function saveExpData(origin) {
         camera.userData.viewedCount[findViewIndex(part2Views[saveCount])];
       saveDataArr[saveCount].originalPos =
         testResults[testResults.length - 1].endPosition;
+      saveDataArr[saveCount].part1ViewNumber = findViewIndex(part2Views[saveCount]);
       saveDataArr[saveCount].shiftedPos = newPoint;
       saveDataArr[saveCount].dotStatus = sceneOrder[0] == 1 ? "L" : "R";
       saveDataArr[saveCount].selected = sceneOrder[0] == origin ? 1 : 0;
@@ -414,22 +430,38 @@ function saveExpData(origin) {
 
       var progress = Math.round((saveCount * 100) / 80);
       $("#testProgress2 > div > div").css("width", progress + "%");
-      $("#testProgress2 span").html(progress);
+      $("#testProgress2 span:eq(1)").html(progress);
+      
       if (saveCount == part2Views.length) {
         $("#part2_wrapper").hide();
         $("#instructions1").hide();
         $(debriefing_questionairre_div_id).show();
-        let post_data = new PostData(cgibin_dir + "dot_log_volume_block2.py");
-        post_data.post(
-          JSON.stringify({ turkID: worker_id, data_content: saveDataArr })
-        );
+        if(unusuableCount * 10 >= dataCount) {
+          alertMX("Your response times indicate that you are not taking the task seriously. Unfortunately, your data are unusable, so it would be helpful if you returned the HIT for somebody else to try. If you think that you have received this message in error, then please complete the experiment and submit the HIT with an explanation of what happened. (Note that we still won't be able to use any of your data.)");
+          saveFlag = false;
+        } else if (saveFlag) {
+          let post_data = new PostData(cgibin_dir + "dot_log_volume.py");
+          post_data.post(
+            JSON.stringify({
+              turkID: worker_id,
+              data_content: testResults,
+              log80: log80Arr
+            })
+          );
+          post_data = new PostData(cgibin_dir + "dot_log_volume_block2.py");
+          post_data.post(
+            JSON.stringify({ turkID: worker_id, data_content: saveDataArr })
+          );
+        }
+     
+        
       } else {
         placeDot();
         renderer1.render(scene1, camera1);
         renderer2.render(scene2, camera2);
       }
     } else {
-      if (dataCount % 4 == 3) part2Views = shuffle(views);
+      if (dataCount % 4 == 3) part2Views = shuffle(part2Views);
 
       camera1.position.set(
         part2Views[dataCount % 4].x,
@@ -447,9 +479,14 @@ function saveExpData(origin) {
       placeDot();
       renderer1.render(scene1, camera1);
       renderer2.render(scene2, camera2);
-      var progress = Math.round(((dataCount % 4) * 100) / 4);
+      var progress = Math.round((dataCount * 100) / 12);
       $("#testProgress2 > div > div").css("width", progress + "%");
-      $("#testProgress2 span").html(progress);
+      $("#testProgress2 span:eq(1)").html(progress);
+      if (dataCount == 12) {
+        $("#testProgress2 span:eq(0)").html("Part 2: Experimental trials ");
+        $("#testProgress2 > div > div").css("width", 0);
+      }
+
     }
   }
 }
@@ -487,7 +524,7 @@ function getRandomPoint(point, type) {
 
     countval++;
 
-    if (countval == 5000) {
+    if (countval == 10000) {
       console.log(
         constant,
         point,
@@ -498,7 +535,7 @@ function getRandomPoint(point, type) {
       countval = 0;
       break;
     }
-  } while (!(newPoint.distanceTo(point) > 2 && newPoint.distanceTo(point) < 3 && validatePoint(newPoint, type)));
+  } while (!(newPoint.distanceTo(point) > 0.001 && newPoint.distanceTo(point) < 2 && validatePoint(newPoint, type)));
   // while (!validatePoint(newPoint, type));
   newPoint.x = newPoint.x.toFixed(3) * 1;
   newPoint.y = newPoint.y.toFixed(3) * 1;

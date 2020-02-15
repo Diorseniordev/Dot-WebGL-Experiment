@@ -9,10 +9,8 @@ request_body = sys.stdin.read(content_length)
 json_data = json.loads(request_body)
 
 # Headers
-TEST_HEADERS = ["type", "view", "part1ViewedTime", "viewedCount",
+TEST_HEADERS = ["type", "view", "part1ViewedTime", "viewedCount", "part1ViewNumber",
                 "originalPos", "shiftedPos", "dotStatus", "selected", "time"]
-
-
 # Check if parameters have been supplied
 if 'turkID' in json_data:
 
@@ -20,7 +18,7 @@ if 'turkID' in json_data:
              (json_data['turkID']), 'w')
     f.write(" \t".join(TEST_HEADERS) + "\n")
     for row in json_data['data_content']:
-        f.write("\t".join([str(row[str(c).rstrip()])
+        f.write("\t".join([str(row[str(c)])
                            for c in TEST_HEADERS]) + "\n")
 
     f.close()

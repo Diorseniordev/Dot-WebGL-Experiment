@@ -101,7 +101,7 @@ function three_init_test() {
   scene.add(camera);
   selectedView = Math.floor(Math.random() * views.length);
   let pos = views[selectedView];
-  console.log(selectedView);
+  // console.log(selectedView);
   camera.userData = {
     selectedView: selectedView,
     views: views,
@@ -403,80 +403,6 @@ function three_play_test_cube(onComplete) {
   setTimeout(() => {
     trial_start = Date.now();
     three_render_test_cube();
-  }, 500);
-}
-
-function three_init_test_pyramid(onComplete) {
-  addMouseEvent(23);
-
-  object0 = new THREE1.Mesh(
-    new THREE1.CylinderGeometry(0, 25, 40, 4, 16),
-    material
-  );
-  object0.position.set(0, 0, 0);
-  scene.add(object0);
-
-  $("#btn3dCheck").click(function() {
-    if (mode != 23) return;
-
-    var valid0 = objects[0].position.y < 18 && objects[0].position.y > -18;
-    //   ,
-    // valid1 = objects[1].position.y < 18 && objects[1].position.y > -18;
-
-    var validR0 = (((20 - objects[0].position.y) * 25) / 40 - 2) * Math.SQRT1_2;
-    // ,
-    //   validR1 = ((20 - objects[1].position.y) * 25) / 40 - 1;
-
-    valid0 =
-      valid0 &&
-      objects[0].position.x < validR0 &&
-      objects[0].position.x > -validR0 &&
-      objects[0].position.z < validR0 &&
-      objects[0].position.z > -validR0;
-    // objects[0].position.x + objects[0].position.z < validR0 &&
-    // objects[0].position.x + objects[0].position.z > -validR0 &&
-    // objects[0].position.x - objects[0].position.z < validR0 &&
-    // objects[0].position.x - objects[0].position.z > -validR0;
-    // valid1 =
-    //   valid1 &&
-    //   objects[1].position.x + objects[1].position.z < validR1 &&
-    //   objects[1].position.x + objects[1].position.z > -validR1 &&
-    //   objects[1].position.x - objects[1].position.z < validR1 &&
-    //   objects[1].position.x - objects[1].position.z > -validR1;
-
-    // var msg =
-    //   valid0 && valid1
-    //     ? "Both dots are inside the shape."
-    //     : !valid0 && !valid1
-    //     ? "Both dots are outside the shape."
-    //     : !valid0
-    //     ? "The green dot is outside the shape."
-    //     : "The yellow dot is outside the shape.";
-    // var msg = valid0 ? "Dot is inside the shape" : "Dot is outside the shape";
-    // $("#testResult").html(msg);
-    if(!valid0) alertMX("Dot is outside the shape");
-    if (valid0 && onComplete != null) {
-      // testResults[testResults.length - 1].endPosition1 = objects[0].position;
-      // testResults[testResults.length - 1].endPosition2 = objects[1].position;
-      onComplete();
-    }
-  });
-}
-
-function three_render_test_pyramid() {
-  if (mode != 23) return;
-  requestAnimationFrame(three_render_test_pyramid);
-  renderScene();
-  // controls.update(clock.getDelta());
-}
-
-function three_play_test_pyramid(onComplete) {
-  mode = 23;
-  three_init_test_pyramid(onComplete);
-
-  setTimeout(() => {
-    trial_start = Date.now();
-    three_render_test_pyramid();
   }, 500);
 }
 
