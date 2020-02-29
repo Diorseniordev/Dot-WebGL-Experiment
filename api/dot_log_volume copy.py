@@ -1,4 +1,4 @@
-#!C:\Users\s7eve\AppData\Local\Programs\Python\Python37\python.exe
+#!/usr/bin/python
 import os
 import sys
 import json

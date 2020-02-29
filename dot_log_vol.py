@@ -1,4 +1,4 @@
-#!C:\Users\s7eve\AppData\Local\Programs\Python\Python37\python.exe
+#!/usr/bin/python
 import os
 import sys
 import json
@@ -9,26 +9,18 @@ request_body = sys.stdin.read(content_length)
 json_data = json.loads(request_body)
 
 # Headers
-TEST_HEADERS = ["type", "edge", "r",
-                "h", "startPosition", "endPosition", "totalTime", "viewedTime", "viewOrder"]
-LOG80_HEADERS = ["viewedTime", "distance", "view"]
-
+TEST_HEADERS = ["worker_id", "gender", "age",
+                "win_resized", "total_time", "condition", "admitted_switching_windows", "summarize_instructions", "clear_enough", "heard_of", "display_problems", "how_well", "decision_criterion", "comp_code"]
 # Check if parameters have been supplied
 if 'turkID' in json_data:
 
-    f = open('dot_volume_block1_%s.txt' %
+    f = open('dot_log_trial_%s.txt' %
              (json_data['turkID']), 'w')
     f.write(" \t".join(TEST_HEADERS) + "\n")
     for row in json_data['data_content']:
         f.write("\t".join([str(row[str(c)])
                            for c in TEST_HEADERS]) + "\n")
-    f.close()
-    f = open('dot_volume_80_%s.txt' %
-             (json_data['turkID']), 'w')
-    f.write(" \t".join(LOG80_HEADERS) + "\n")
-    for row in json_data['log80']:
-        f.write("\t".join([str(row[str(c)])
-                           for c in LOG80_HEADERS]) + "\n")
+
     f.close()
 
     result = {'success': 'true',
