@@ -9,8 +9,8 @@ request_body = sys.stdin.read(content_length)
 json_data = json.loads(request_body)
 
 # Headers
-TEST_HEADERS = ["selected", "type", "view", "part1ViewedTime", "viewedCount",
-                "originalPos", "part1ViewNumber", "shiftedPos", "dotStatus", "time"]
+TEST_HEADERS = ["originalDotSide", "selected", "type", "view", "part1ViewedTime", "viewedCount",
+                "originalPos", "part1ViewNumber", "shiftedPos", "worldDist", "time"]
 # Check if parameters have been supplied
 if 'turkID' in json_data:
 

@@ -168,7 +168,7 @@ function three_init_test() {
     new THREE1.MeshFaceMaterial(cbmaterials)
   );
   plane1_2.rotation.x = Math.PI / 2;
-  plane1_2.position.y = -22;
+  plane1_2.position.y = -20.5;
   scene.add(plane1_2);
 
   container.append(renderer.domElement);
@@ -285,7 +285,7 @@ function three_init_test_sphere(onComplete) {
   object0.name = "sphere";
   // console.log(object0);
   scene.add(object0);
-
+  plane1_2.position.y = -20.5;
   $("#btn3dCheck").click(function() {
     if (mode != 21) return;
 
@@ -349,7 +349,7 @@ function three_init_test_cube(onComplete) {
   );
   object0.position.set(0, 0, 0);
   scene.add(object0);
-
+  plane1_2.position.y = -16.5;
   $("#btn3dCheck").click(function() {
     if (mode != 22) return;
 
@@ -415,7 +415,7 @@ function three_init_test_rectprism1(onComplete) {
   );
   object0.position.set(0, 0, 0);
   scene.add(object0);
-
+  plane1_2.position.y = -20.5;
   $("#btn3dCheck").click(function() {
     if (mode != 241) return;
 
@@ -480,7 +480,7 @@ function three_init_test_rectprism2(onComplete) {
   );
   object0.position.set(0, 0, 0);
   scene.add(object0);
-
+  plane1_2.position.y = -14.5;
   $("#btn3dCheck").click(function() {
     if (mode != 242) return;
 
@@ -544,7 +544,7 @@ function three_init_test_cylinder1(onComplete) {
   );
   object0.position.set(0, 0, 0);
   scene.add(object0);
-
+  plane1_2.position.y = -20.5;
   $("#btn3dCheck").click(function() {
     if (mode != 251) return;
 
@@ -611,7 +611,7 @@ function three_init_test_cylinder2(onComplete) {
   object0.rotateZ(-Math.PI * 0.5);
   object0.position.set(0, 0, 0);
   scene.add(object0);
-
+  plane1_2.position.y = -16;
   $("#btn3dCheck").click(function() {
     if (mode != 252) return;
 

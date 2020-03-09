@@ -15,11 +15,11 @@ LOG80_HEADERS = ["viewedTime", "distance", "view"]
 
 # Check if parameters have been supplied
 if 'turkID' in json_data:
-
+    
     f = open('dot_volume_block1_%s.txt' %
              (json_data['turkID']), 'w')
     f.write(" \t".join(TEST_HEADERS) + "\n")
-    for row in json_data['data_content']:
+    for row in json_data['data_content']:   
         f.write("\t".join([str(row[str(c)])
                            for c in TEST_HEADERS]) + "\n")
     f.close()

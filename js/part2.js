@@ -22,7 +22,8 @@ var part2Volume,
   dataCount = 0,
   block2start = 0, 
   unusuableCount = 0, 
-  skipFlag = false ;
+  skipFlag = false, 
+  worldDist = 4 ;
 
 function fillVolumeArr1() {
   part2VolumeArr1[0] = new THREE.Mesh(
@@ -108,32 +109,44 @@ function addVolumeToScene(name) {
 
       part2Volume1 = part2VolumeArr1[0];
       part2Volume2 = part2VolumeArr2[0];
+      plane2.position.y = -16.5;
+      plane22.position.y = -16.5;
       break;
     case "sphere":
       console.log("sphere");
       part2Volume1 = part2VolumeArr1[1];
       part2Volume2 = part2VolumeArr2[1];
+      plane2.position.y = -20;
+      plane22.position.y = -20;
       break;
     
     case "rectangle prism standing":
       console.log("rectangle prism standing");
       part2Volume1 = part2VolumeArr1[3];
       part2Volume2 = part2VolumeArr2[3];
+      plane2.position.y = -20.5;
+      plane22.position.y = -20.5;
       break;
     case "rectangle prism":
       console.log("rectangle prism");
       part2Volume1 = part2VolumeArr1[4];
       part2Volume2 = part2VolumeArr2[4];
+      plane2.position.y = -14.5;
+      plane22.position.y = -14.5;
       break;
     case "cylinder standing":
       console.log("cylinder standing");
       part2Volume1 = part2VolumeArr1[5];
       part2Volume2 = part2VolumeArr2[5];
+      plane2.position.y = -20.5;
+      plane22.position.y = -20.5;
       break;
     case "cylinder":
       console.log("cylinder");
       part2Volume1 = part2VolumeArr1[6];
       part2Volume2 = part2VolumeArr2[6];
+      plane2.position.y = -16;
+      plane22.position.y = -16;
       break;
   }
   scene1.add(part2Volume1);
@@ -411,9 +424,9 @@ function saveExpData(origin) {
         testResults[testResults.length - 1].endPosition;
       saveDataArr[saveCount].part1ViewNumber = findViewIndex(part2Views[saveCount]);
       saveDataArr[saveCount].shiftedPos = newPoint;
-      saveDataArr[saveCount].dotStatus = sceneOrder[0] == 1 ? "L" : "R";
+      saveDataArr[saveCount].originalDotSide = sceneOrder[0] == 1 ? "L" : "R";
       saveDataArr[saveCount].selected = sceneOrder[0] == origin ? 1 : 0;
-      saveDataArr[saveCount].selected = skipFlag ? "NaN" : saveDataArr[saveCount].selected;
+      saveDataArr[saveCount].worldDist = worldDist;
       saveDataArr[saveCount].time = skipFlag ? "NaN" : ((Date.now() - block2start) / 1000).toFixed(
         3
       );
@@ -439,7 +452,7 @@ function saveExpData(origin) {
       $("#testProgress2 span:eq(1)").html(progress);
       
       if (saveCount == part2Views.length) {
-        // if (saveCount == 10) {
+        
         if(unusuableCount * 10 >= dataCount) {
           alertMX("Your response times indicate that you are not taking the task seriously. Unfortunately, your data are unusable, so it would be helpful if you returned the HIT for somebody else to try. If you think that you have received this message in error, then please complete the experiment and submit the HIT with an explanation of what happened. (Note that we still won't be able to use any of your data.)");
           saveFlag = false;
@@ -517,7 +530,7 @@ function getRandomPoint(point, type) {
         (constant - randview.y * newPoint.y - randview.z * newPoint.z) /
         randview.x;
     }
-
+    newPoint.sub(point).normalize().multiplyScalar(worldDist).add(point);
     countval++;
 
     if (countval == 10000) {
@@ -531,8 +544,8 @@ function getRandomPoint(point, type) {
       countval = 0;
       skipFlag = true;
       break;
-    }
-  } while (!(newPoint.distanceTo(point) > 0.001 && newPoint.distanceTo(point) < 2 && validatePoint(newPoint, type)));
+    } 
+  } while (!validatePoint(newPoint, type));
   // while (!validatePoint(newPoint, type));
   newPoint.x = newPoint.x.toFixed(3) * 1;
   newPoint.y = newPoint.y.toFixed(3) * 1;

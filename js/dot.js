@@ -590,8 +590,6 @@ function go_next_task() {
     testResults[testResults.length - 1].viewedTime = camera.userData.viewedTime;
     testResults[testResults.length - 1].viewOrder =
       camera.userData.viewedOrder;
-    
-      
     testCount++;
     if (testCount == 3) {
       alertMX(
@@ -615,11 +613,24 @@ function go_next_task() {
             .distanceTo(views[i])
             .toFixed(3);
           log80Arr[i].view = views[i];
-          // log80Arr[i].view = "view";
         }
         
       }
    
+      // $.notify(
+      //   {
+      //     title:
+      //       "You completed the trials. <br>The next one is real experiment data<br>Pay attention"
+      //   },
+      //   {
+      //     style: "foo",
+      //     autoHide: false,
+      //     clickToHide: false
+      //   }
+      // );
+
+      // $(debriefing_questionairre_div_id).show();
+      // console.log(testResults);a
       do_task2();
     } else {
       loop_task();
@@ -716,23 +727,18 @@ function gradeDebriefingQuestions() {
           data_content: complete_datas
         })
       );
-      
       post_data = new PostData(cgibin_dir + "dot_log_volume.py");
       post_data.post(
         JSON.stringify({
           turkID: worker_id,
-          data_content: testResults
-          , log80: log80Arr
+          data_content: testResults,
+          log80: log80Arr
         })
-      );  
-      
-      
+      );
       post_data = new PostData(cgibin_dir + "dot_log_volume_block2.py");
       post_data.post(
         JSON.stringify({ turkID: worker_id, data_content: saveDataArr })
       );
-    
-     
     }
     
 
@@ -898,6 +904,23 @@ function objToString(obj) {
   return str;
 }
 
+// function determine_condition(id_str) {
+//   $.post(
+//     cgibin_dir + "determine_condition.py",
+//     { workerid: id_str },
+//     determine_condition_callback
+//   );
+// }
+
+// function determine_condition_callback(check_status) {
+//   condition = +check_status;
+//   // alert(connectedness_condition)
+
+//   if (condition == -1) {
+//     alert("Abort: experiment sample reached!");
+//   }
+//   // console.log(condition);
+// }
 
 function alertMX(t) {
   $("body").append(
